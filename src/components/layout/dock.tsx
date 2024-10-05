@@ -38,9 +38,9 @@ const links = [
 
 export default function FloatingDock() {
   return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-zinc-50/70 backdrop-filter backdrop-blur-lg rounded-full px-6 py-3 shadow-lg">
+    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-primary-foreground/70 backdrop-filter backdrop-blur-lg rounded-full px-6 py-3 shadow-lg">
       <nav>
-        <ul className="flex space-x-6">
+        <ul className="flex space-x-4 sm:space-x-6">
           <TooltipProvider>
             {links.map((link) => (
               <li key={link.name}>

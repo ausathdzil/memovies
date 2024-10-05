@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
-    <footer className="bg-foreground py-8 content-center">
-      <div className="max-w-4xl flex items-center justify-between mx-auto">
+    <footer className="bg-primary py-8 content-center">
+      <div className="max-w-4xl flex items-center justify-between mx-auto px-8 lg:px-0">
         <p className="text-background">© Ausath Ikram</p>
         <div className="flex items-center gap-8">
           <a
