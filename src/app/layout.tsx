@@ -12,7 +12,7 @@ const manrope = localFont({
 
 export const metadata: Metadata = {
   title: 'Memovies',
-  description: '',
+  description: 'Save your precious memories.',
 };
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${manrope.variable} antialiased`}>
-        <main className="font-[family-name:var(--font-manrope)] max-w-5xl min-h-[calc(100vh-96px)] flex flex-col items-center justify-center gap-16 p-16 mx-auto">
+        <main className="font-[family-name:var(--font-manrope)] max-w-5xl min-h-[calc(100vh-88px)] flex flex-col items-center justify-center gap-16 p-16 mx-auto">
           {children}
         </main>
         <FloatingDock />

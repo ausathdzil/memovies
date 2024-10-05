@@ -12,17 +12,19 @@ export default async function Home() {
 
   return (
     <>
-      <section className="mt-16">
+      <section className="mt-12">
         <article className="space-y-2 text-center">
           <h1 className="text-6xl font-semibold">Memovies</h1>
-          <p className="text-lg">Save your precious memories.</p>
+          <p className="text-lg">
+            Save your <span className="text-teal-500">precious</span> memories.
+          </p>
         </article>
       </section>
       <section>
         {filteredMovies.length !== 0 && (
           <ul className="grid grid-cols-3 gap-x-16 gap-y-8">
             {filteredMovies.map((movie) => (
-              <li key={movie.id}>
+              <li className="text-center space-y-2" key={movie.id}>
                 <div className="relative w-[256px] h-[384px]">
                   <Image
                     className="rounded-lg shadow"
@@ -31,8 +33,10 @@ export default async function Home() {
                     fill
                   />
                 </div>
-                <h2>{movie.title}</h2>
-                <p>{movie.vote_average}</p>
+                <article>
+                  <p className="text-lg font-semibold">{movie.title}</p>
+                  <p>⭐ {movie.vote_average}</p>
+                </article>
               </li>
             ))}
           </ul>
@@ -42,7 +46,7 @@ export default async function Home() {
         {filteredTVShows.length !== 0 && (
           <ul className="grid grid-cols-3 gap-x-16 gap-y-8">
             {filteredTVShows.map((tvShow) => (
-              <li key={tvShow.id}>
+              <li className="text-center space-y-2" key={tvShow.id}>
                 <div className="relative w-[256px] h-[384px]">
                   <Image
                     className="rounded-lg shadow"
@@ -51,8 +55,10 @@ export default async function Home() {
                     fill
                   />
                 </div>
-                <h2>{tvShow.name}</h2>
-                <p>{tvShow.vote_average}</p>
+                <article>
+                  <p className="text-lg font-semibold">{tvShow.name}</p>
+                  <p>⭐ {tvShow.vote_average}</p>
+                </article>
               </li>
             ))}
           </ul>

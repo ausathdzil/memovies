@@ -51,6 +51,7 @@ export default function FloatingDock() {
                         className="p-2 rounded-full"
                         variant="ghost"
                         size="icon"
+                        aria-label={link.name}
                       >
                         <link.icon className="hover:scale-105 transition-transform" />
                       </Button>

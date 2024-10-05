@@ -8,6 +8,7 @@ export default function Footer() {
             href="http://github.com/ausathdzil"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="GitHub"
           >
             <svg
               className="hover:scale-105 transition-transform"
@@ -24,6 +25,7 @@ export default function Footer() {
             href="http://linkedin.com/in/ausathdzil"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="LinkedIn"
           >
             <svg
               className="hover:scale-105 transition-transform"
