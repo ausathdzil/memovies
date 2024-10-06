@@ -1,10 +1,15 @@
-export default function Page() {
+import NowPlayingSection from '@/components/movies/now-playing-section';
+import PopularSection from '@/components/movies/popular-section';
+import TopRatedSection from '@/components/movies/top-rated-section';
+import UpcomingSection from '@/components/movies/upcoming-section';
+
+export default async function Page() {
   return (
-    <section>
-      <article className="space-y-4 text-6xl text-center font-semibold">
-        <p>🙇</p>
-        <h1>This page is still under construction.</h1>
-      </article>
-    </section>
+    <>
+      <NowPlayingSection />
+      <PopularSection />
+      <TopRatedSection />
+      <UpcomingSection />
+    </>
   );
 }
