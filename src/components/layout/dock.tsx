@@ -38,7 +38,7 @@ const links = [
 
 export default function FloatingDock() {
   return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-primary-foreground/70 backdrop-filter backdrop-blur-lg rounded-full px-6 py-3 shadow-lg">
+    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-primary-foreground/70 backdrop-filter backdrop-blur-lg rounded-full px-6 py-3 border-2 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
       <nav>
         <ul className="flex space-x-4 sm:space-x-6">
           <TooltipProvider>

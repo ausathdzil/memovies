@@ -15,26 +15,30 @@ export default async function Page({
 
   return (
     <section className="mt-12">
-      <div className="relative max-w-7xl mx-auto min-h-[450px] overflow-hidden rounded-lg">
+      <div className="relative max-w-7xl mx-auto min-h-[450px] overflow-hidden rounded-lg border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)]">
         <Image
           className="object-cover object-top"
           src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
           alt={movie.title}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           priority
           fill
         />
         <div className="absolute inset-0 bg-primary/75 backdrop-filter backdrop-blur-sm rounded-lg" />
         <div className="relative flex flex-col lg:flex-row items-center lg:items-start gap-8 p-8">
-          <div className="relative w-[180px] sm:w-[256px] h-[270px] sm:h-[384px] flex-shrink-0 overflow-hidden rounded-lg">
+          <div className="relative w-[180px] sm:w-[256px] h-[270px] sm:h-[384px] flex-shrink-0 overflow-hidden rounded-lg border-2 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
             <Image
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.title}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               priority
               fill
             />
           </div>
           <article className="text-primary-foreground flex-grow space-y-2 sm:text-xl">
-            <h1 className="text-2xl sm:text-4xl font-semibold">{movie.title}</h1>
+            <h1 className="text-2xl sm:text-4xl font-semibold">
+              {movie.title}
+            </h1>
             <p className="text-zinc-300 sm:text-lg italic">{movie.tagline}</p>
             <p>⭐ {movie.vote_average.toFixed(1)}</p>
             <div className="flex flex-wrap gap-2">

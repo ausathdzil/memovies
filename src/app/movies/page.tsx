@@ -3,7 +3,7 @@ import PopularSection from '@/components/movies/popular-section';
 import TopRatedSection from '@/components/movies/top-rated-section';
 import UpcomingSection from '@/components/movies/upcoming-section';
 
-export default async function Page() {
+export default function Page() {
   return (
     <>
       <NowPlayingSection />

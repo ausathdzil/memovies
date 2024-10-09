@@ -9,17 +9,18 @@ export default async function MoviesSection() {
     : [];
 
   return (
-    <section>
+    <section className="mt-2">
       {movies && (
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-8">
           {filteredMovies.map((movie) => (
-            <li className="text-center space-y-2" key={movie.id}>
+            <li className="text-center space-y-4" key={movie.id}>
               <Link href={`/movies/${movie.id}`}>
                 <div className="relative w-[256px] h-[384px]">
                   <Image
-                    className="rounded-lg shadow"
+                    className="border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)] rounded-xl"
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                     alt={movie.title}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     priority
                     fill
                   />
