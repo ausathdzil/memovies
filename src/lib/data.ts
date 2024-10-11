@@ -70,7 +70,7 @@ export async function getTVShow(tvShowId: number): Promise<TVShow | null> {
   }
 }
 
-export async function getNowPlayingMovies(): Promise<Movie[] | null> {
+export async function getNowPlayingMovies(): Promise<MovieList[] | null> {
   try {
     const res = await fetch('https://api.themoviedb.org/3/movie/now_playing', {
       method: 'GET',
@@ -86,7 +86,7 @@ export async function getNowPlayingMovies(): Promise<Movie[] | null> {
   }
 }
 
-export async function getPopularMovies(): Promise<Movie[] | null> {
+export async function getPopularMovies(): Promise<MovieList[] | null> {
   try {
     const res = await fetch('https://api.themoviedb.org/3/movie/popular', {
       method: 'GET',
@@ -102,7 +102,7 @@ export async function getPopularMovies(): Promise<Movie[] | null> {
   }
 }
 
-export async function getTopRatedMovies(): Promise<Movie[] | null> {
+export async function getTopRatedMovies(): Promise<MovieList[] | null> {
   try {
     const res = await fetch('https://api.themoviedb.org/3/movie/top_rated', {
       method: 'GET',
@@ -118,9 +118,73 @@ export async function getTopRatedMovies(): Promise<Movie[] | null> {
   }
 }
 
-export async function getUpcomingMovies(): Promise<Movie[] | null> {
+export async function getUpcomingMovies(): Promise<MovieList[] | null> {
   try {
     const res = await fetch('https://api.themoviedb.org/3/movie/upcoming', {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+      },
+    });
+    const data = await res.json();
+    return data.results;
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function getAiringToday(): Promise<TVShowList[] | null> {
+  try {
+    const res = await fetch('https://api.themoviedb.org/3/tv/airing_today', {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+      },
+    });
+    const data = await res.json();
+    return data.results;
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function getOnTheAir(): Promise<TVShowList[] | null> {
+  try {
+    const res = await fetch('https://api.themoviedb.org/3/tv/on_the_air', {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+      },
+    });
+    const data = await res.json();
+    return data.results;
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function getPopularTVShows(): Promise<TVShowList[] | null> {
+  try {
+    const res = await fetch('https://api.themoviedb.org/3/tv/popular', {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+      },
+    });
+    const data = await res.json();
+    return data.results;
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function getTopRatedTVShows(): Promise<TVShowList[] | null> {
+  try {
+    const res = await fetch('https://api.themoviedb.org/3/tv/top_rated', {
       method: 'GET',
       headers: {
         accept: 'application/json',

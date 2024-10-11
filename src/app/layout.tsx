@@ -1,8 +1,8 @@
+import FloatingDock from '@/components/layout/dock';
 import Footer from '@/components/layout/footer';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import FloatingDock from '@/components/layout/dock';
 
 const manrope = localFont({
   src: './fonts/Manrope-VariableFont_wght.ttf',
