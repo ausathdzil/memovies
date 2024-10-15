@@ -73,7 +73,7 @@ export type TVShow = {
   created_by: {
     id: number;
     credit_id: string;
-    name: string
+    name: string;
     gender: number;
     profile_path: string;
   }[];
@@ -106,4 +106,4 @@ export type TVShow = {
   type: string;
   vote_average: number;
   vote_count: number;
-}
+};
