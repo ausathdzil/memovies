@@ -9,7 +9,7 @@ export default async function MoviesSection() {
     : [];
 
   return (
-    <section className="mt-2">
+    <section className="mt-2 sm:w-full sm:max-w-4xl">
       {movies && (
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-8">
           {filteredMovies.map((movie) => (

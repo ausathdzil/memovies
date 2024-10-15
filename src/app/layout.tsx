@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${manrope.className} antialiased`}>
-        <main className="max-w-5xl min-h-[calc(100vh-94px)] flex flex-col items-center justify-center gap-8 p-16 mx-auto">
+        <main className="min-h-[calc(100vh-94px)] flex flex-col items-center justify-center gap-8 p-16 mx-auto">
           {children}
         </main>
         <FloatingDock />

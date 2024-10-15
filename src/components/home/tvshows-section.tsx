@@ -9,7 +9,7 @@ export default async function TVShowsSection() {
     : [];
 
   return (
-    <section>
+    <section className="sm:w-full sm:max-w-4xl">
       {tvShows && (
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-8">
           {filteredTVShows.map((tvShow) => (
