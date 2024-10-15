@@ -1,4 +1,32 @@
+import { db } from '@/db';
+import { users } from '@/db/schema';
 import { Movie, MovieList, TVShow, TVShowList } from '@/lib/definitions';
+import { eq } from 'drizzle-orm';
+import { cache } from 'react';
+import { verifySession } from './session';
+
+export const getUser = cache(async () => {
+  const session = await verifySession();
+  const data = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, Number(session.userId)));
+  const user = data[0];
+  const filteredUser = userDTO(user);
+  return filteredUser;
+});
+
+function userDTO(user: {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+}) {
+  return {
+    name: user.name,
+    email: user.email,
+  };
+}
 
 export async function getMovies(): Promise<MovieList[] | null> {
   try {

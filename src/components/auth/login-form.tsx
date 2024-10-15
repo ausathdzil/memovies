@@ -3,12 +3,12 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { signup } from '@/lib/actions';
+import { login } from '@/lib/actions';
 import { Loader2 } from 'lucide-react';
 import { startTransition, useActionState } from 'react';
 
-export default function SignUpForm() {
-  const [state, formAction, pending] = useActionState(signup, undefined);
+export default function LoginForm() {
+  const [state, formAction, pending] = useActionState(login, undefined);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -19,15 +19,6 @@ export default function SignUpForm() {
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
-      <div className="space-y-1">
-        <Label htmlFor="name">Name</Label>
-        <Input type="text" name="name" placeholder="Enter your name" />
-        {state?.errors?.name && (
-          <p className="text-destructive text-sm">
-            {state.errors.name.join(', ')}
-          </p>
-        )}
-      </div>
       <div className="space-y-1">
         <Label htmlFor="email">Email</Label>
         <Input type="email" name="email" placeholder="email@example.com" />
@@ -42,19 +33,10 @@ export default function SignUpForm() {
         <Input
           type="password"
           name="password"
-          placeholder="Enter a unique password"
+          placeholder="Enter your password"
         />
-        {state?.errors?.password?.length ? (
-          <div className="text-destructive text-sm">
-            <p>Password must:</p>
-            <ul>
-              {state.errors.password.map((error, index) => (
-                <li key={index}>&bull; {error}</li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          <></>
+        {state?.errors?.password && (
+          <p className="text-destructive text-sm">{state.errors.password}</p>
         )}
       </div>
 
@@ -64,7 +46,7 @@ export default function SignUpForm() {
         type="submit"
       >
         {pending && <Loader2 className="animate-spin mr-2" />}
-        <span>Sign up</span>
+        <span>Login</span>
       </Button>
 
       {state?.message && (

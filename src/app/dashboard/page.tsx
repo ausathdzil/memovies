@@ -1,10 +1,21 @@
-export default function Page() {
+import { Button } from '@/components/ui/button';
+import { getUser } from '@/lib/data';
+import { deleteSession } from '@/lib/session';
+
+export default async function Page() {
+  const user = await getUser();
+
   return (
-    <section>
-      <article className="space-y-4 text-6xl text-center font-semibold">
-        <p>🙇</p>
-        <h1>This page is still under construction.</h1>
-      </article>
+    <section className="space-y-4">
+      <pre>{JSON.stringify(user, null, 2)}</pre>
+      <form
+        action={async () => {
+          'use server';
+          deleteSession();
+        }}
+      >
+        <Button type="submit">Logout</Button>
+      </form>
     </section>
   );
 }

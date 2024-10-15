@@ -1,7 +1,12 @@
 'use server';
 
-import { z } from 'zod';
+import { db } from '@/db';
+import { users } from '@/db/schema';
 import bcrypt from 'bcrypt';
+import { z } from 'zod';
+import { createSession } from './session';
+import { redirect } from 'next/navigation';
+import { eq } from 'drizzle-orm';
 
 const SignUpFormSchema = z.object({
   name: z
@@ -17,17 +22,19 @@ const SignUpFormSchema = z.object({
     .trim(),
 });
 
-export type State = {
-  success: boolean;
-  message?: string | null;
-  errors?: {
-    name?: string[];
-    email?: string[];
-    password?: string[];
-  };
-};
+export type SignUpState =
+  | {
+      success: boolean;
+      message?: string | null;
+      errors?: {
+        name?: string[];
+        email?: string[];
+        password?: string[];
+      };
+    }
+  | undefined;
 
-export async function signup(prevState: State, formData: FormData) {
+export async function signup(prevState: SignUpState, formData: FormData) {
   const validatedFields = SignUpFormSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
@@ -44,16 +51,77 @@ export async function signup(prevState: State, formData: FormData) {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
-    console.log('User signed up:', { name, email, password: hashedPassword });
+    const data = await db
+      .insert(users)
+      .values({ name, email, password: hashedPassword })
+      .returning({ id: users.id });
+    const user = data[0];
+    await createSession(user.id);
+    redirect('/dashboard');
   } catch (error) {
     return {
       success: false,
       message: 'Sign up failed.',
     };
   }
+}
 
-  return {
-    success: true,
-    message: 'Sign up successful.',
-  };
+export type LoginState =
+  | {
+      success: boolean;
+      message?: string | null;
+      errors?: {
+        email?: string[];
+        password?: string[];
+      };
+    }
+  | undefined;
+
+const LoginFormSchema = z.object({
+  email: z
+    .string()
+    .email({
+      message: 'Please enter your email.',
+    })
+    .trim(),
+  password: z
+    .string()
+    .min(1, {
+      message: 'Please enter your password.',
+    })
+    .trim(),
+});
+
+export async function login(prevState: LoginState, formData: FormData) {
+  const validatedFields = LoginFormSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { email, password } = validatedFields.data;
+
+  const user = await db.select().from(users).where(eq(users.email, email));
+  if (!user) {
+    return {
+      success: false,
+      message: 'Invalid login credentials',
+    };
+  }
+
+  const passwordMatch = await bcrypt.compare(password, user[0].password);
+  if (!passwordMatch) {
+    return {
+      success: false,
+      message: 'Invalid login credentials',
+    };
+  }
+
+  await createSession(user[0].id);
 }
