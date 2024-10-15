@@ -10,14 +10,14 @@ export const getUser = cache(async () => {
   const data = await db
     .select()
     .from(users)
-    .where(eq(users.id, Number(session.userId)));
+    .where(eq(users.id, session.userId as string));
   const user = data[0];
   const filteredUser = userDTO(user);
   return filteredUser;
 });
 
 function userDTO(user: {
-  id: number;
+  id: string;
   name: string;
   email: string;
   password: string;

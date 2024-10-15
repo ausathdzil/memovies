@@ -6,17 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { getUser } from '@/lib/data';
+import { verifySession } from '@/lib/session';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 
 export default async function Page() {
-  const user = await getUser();
-  
-  if (user) {
-    redirect('/dashboard');
-  }
-
   return (
     <section className="mt-12">
       <Card className="border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)] rounded-xl">

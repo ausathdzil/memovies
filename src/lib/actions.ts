@@ -3,10 +3,10 @@
 import { db } from '@/db';
 import { users } from '@/db/schema';
 import bcrypt from 'bcrypt';
+import { eq } from 'drizzle-orm';
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { createSession } from './session';
-import { redirect } from 'next/navigation';
-import { eq } from 'drizzle-orm';
 
 const SignUpFormSchema = z.object({
   name: z
@@ -47,23 +47,41 @@ export async function signup(prevState: SignUpState, formData: FormData) {
       errors: validatedFields.error.flatten().fieldErrors,
     };
   }
+
   const { name, email, password } = validatedFields.data;
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  try {
-    const data = await db
-      .insert(users)
-      .values({ name, email, password: hashedPassword })
-      .returning({ id: users.id });
-    const user = data[0];
-    await createSession(user.id);
-    redirect('/dashboard');
-  } catch (error) {
+  const existingUser = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email));
+
+  if (existingUser.length > 0) {
+    return {
+      success: false,
+      errors: {
+        email: ['Email already exists, please use a different email or login.'],
+      },
+    };
+  }
+
+  const data = await db
+    .insert(users)
+    .values({ name, email, password: hashedPassword })
+    .returning({ id: users.id });
+
+  const user = data[0];
+
+  if (!user) {
     return {
       success: false,
       message: 'Sign up failed.',
     };
   }
+
+  await createSession(user.id);
+
+  redirect('/dashboard');
 }
 
 export type LoginState =

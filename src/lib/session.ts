@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 const key = new TextEncoder().encode(process.env.SECRET);
 
 export type Payload = {
-  userId: number;
+  userId: string;
   expiresAt: Date;
 };
 
@@ -29,7 +29,7 @@ export async function decrypt(session: string | undefined = '') {
   }
 }
 
-export async function createSession(userId: number) {
+export async function createSession(userId: string) {
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
   const session = await encryppt({ userId, expiresAt });
 
