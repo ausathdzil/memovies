@@ -14,11 +14,9 @@ export default function useTime() {
       setOneMonthLater(
         new Date(time.getFullYear(), time.getMonth() + 1, time.getDate())
       );
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+    }, 3600000);
+    return () => clearInterval(interval);
+  }, [time]);
   return {
     oneMonthAgo,
     oneMonthLater,

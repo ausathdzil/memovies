@@ -19,7 +19,7 @@ export default function Page() {
         <CardContent className="p-8 pt-0 space-y-8">
           <LoginForm />
           <p className="text-center">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/signup" className="text-teal-500 hover:underline">
               Sign up now
             </Link>

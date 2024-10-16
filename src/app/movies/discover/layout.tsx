@@ -2,6 +2,7 @@ import SearchForm from '@/components/movies/discover/search-form';
 import MovieListSideBar from '@/components/movies/discover/sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { getMovieGenres } from '@/lib/data';
+import { Suspense } from 'react';
 
 export default async function Layout({
   children,
@@ -12,9 +13,13 @@ export default async function Layout({
 
   return (
     <main className="h-screen flex">
-      <MovieListSideBar genres={genres} />
+      <Suspense>
+        <MovieListSideBar genres={genres} />
+      </Suspense>
       <div className="flex-grow flex flex-col">
-        <SearchForm />
+        <Suspense>
+          <SearchForm />
+        </Suspense>
         <ScrollArea className="flex-grow h-full">{children}</ScrollArea>
       </div>
     </main>

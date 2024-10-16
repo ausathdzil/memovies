@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { MovieGenre } from '@/lib/definitions';
-import { Filter, History, Star } from 'lucide-react';
+import { Filter, History } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useRef } from 'react';
