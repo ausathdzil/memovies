@@ -7,12 +7,12 @@ import Link from 'next/link';
 
 export default function Page() {
   return (
-    <>
+    <main className="p-16 flex flex-col items-center">
       <NowPlayingSection />
       <PopularSection />
       <TopRatedSection />
       <UpcomingSection />
-      <Link className="text-lg hover:underline" href="/movies/list">
+      <Link className="text-lg hover:underline" href="/movies/discover">
         <Button
           className="bg-background text-primary text-lg hover:bg-teal-400 border-2 border-black"
           size="lg"
@@ -20,6 +20,6 @@ export default function Page() {
           Find more movies -&gt;
         </Button>
       </Link>
-    </>
+    </main>
   );
 }

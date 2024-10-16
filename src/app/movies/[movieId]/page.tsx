@@ -14,8 +14,8 @@ export default async function Page({
   }
 
   return (
-    <section className="mt-12">
-      <div className="relative max-w-7xl mx-auto min-h-[450px] overflow-hidden rounded-lg border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)]">
+    <main className="min-h-[calc(100vh-94px)] flex flex-col justify-center">
+      <div className="mt-12 relative max-w-4xl mx-auto min-h-[450px] overflow-hidden rounded-lg border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)]">
         <Image
           className="object-cover object-top"
           src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
@@ -63,6 +63,6 @@ export default async function Page({
           </article>
         </div>
       </div>
-    </section>
+    </main>
   );
 }

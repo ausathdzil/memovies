@@ -41,7 +41,6 @@ export type Movie = {
     poster_path: string;
     backdrop_path: string;
   };
-  budget: number;
   genres: {
     id: number;
     name: string;
@@ -62,7 +61,6 @@ export type Movie = {
   status: string;
   tagline: string;
   title: string;
-  video: boolean;
   vote_average: number;
   vote_count: number;
 };
@@ -106,4 +104,16 @@ export type TVShow = {
   type: string;
   vote_average: number;
   vote_count: number;
+};
+
+export type MovieGenre = {
+  id: number;
+  name: string;
+};
+
+export type SearchParams = {
+  sortBy?: string;
+  genre?: string;
+  from?: string;
+  to?: string;
 };

@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -5,12 +7,21 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import clsx from 'clsx';
 import { Film, Home, LayoutDashboard, Tv, User } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function FloatingDock() {
+  const currentPath = usePathname();
+
   return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-primary-foreground/70 backdrop-filter backdrop-blur-lg rounded-full px-6 py-3 border-2 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
+    <div
+      className={clsx(
+        `fixed left-1/2 transform -translate-x-1/2 bg-primary-foreground/70 backdrop-filter backdrop-blur-lg rounded-full px-6 py-3 border-2 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]`,
+        currentPath.startsWith('/movies/discover') ? 'bottom-6' : 'top-4'
+      )}
+    >
       <nav>
         <ul className="flex space-x-4 sm:space-x-6">
           <TooltipProvider>

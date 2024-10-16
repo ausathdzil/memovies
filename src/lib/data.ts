@@ -1,9 +1,16 @@
 import { db } from '@/db';
 import { users } from '@/db/schema';
-import { Movie, MovieList, TVShow, TVShowList } from '@/lib/definitions';
+import {
+  Movie,
+  MovieGenre,
+  MovieList,
+  SearchParams,
+  TVShow,
+  TVShowList,
+} from '@/lib/definitions';
+import { verifySession } from '@/lib/session';
 import { eq } from 'drizzle-orm';
 import { cache } from 'react';
-import { verifySession } from './session';
 
 export const getUser = cache(async () => {
   const session = await verifySession();
@@ -219,6 +226,59 @@ export async function getTopRatedTVShows(): Promise<TVShowList[] | null> {
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
       },
     });
+    const data = await res.json();
+    return data.results;
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function getMovieGenres(): Promise<MovieGenre[] | null> {
+  try {
+    const res = await fetch(
+      'https://api.themoviedb.org/3/genre/movie/list?language=en',
+      {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+        },
+      }
+    );
+    const data = await res.json();
+    return data.genres;
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function getDiscoverMovies(
+  searchParams: SearchParams
+): Promise<MovieList[] | null> {
+  const query = new URLSearchParams();
+
+  if (searchParams.sortBy) query.append('sort_by', searchParams.sortBy);
+
+  if (searchParams.genre)
+    query.append('with_genres', searchParams.genre.toString());
+
+  if (searchParams.from)
+    query.append('primary_release_date.gte', searchParams.from);
+
+  if (searchParams.to)
+    query.append('primary_release_date.lte', searchParams.to);
+
+  try {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1${query}`,
+      {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+        },
+      }
+    );
     const data = await res.json();
     return data.results;
   } catch (error) {

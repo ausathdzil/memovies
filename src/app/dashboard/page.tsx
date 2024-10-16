@@ -11,7 +11,7 @@ export default async function Page() {
       <form
         action={async () => {
           'use server';
-          deleteSession();
+          await deleteSession();
         }}
       >
         <Button type="submit">Logout</Button>

@@ -5,11 +5,11 @@ import TopRatedSection from '@/components/tv-shows/top-rated-section';
 
 export default function Page() {
   return (
-    <>
+    <main className="p-16 flex flex-col items-center">
       <AiringTodaySection />
       <OnTheAirSection />
       <PopularSection />
       <TopRatedSection />
-    </>
+    </main>
   );
 }

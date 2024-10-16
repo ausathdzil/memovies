@@ -2,11 +2,11 @@
 
 import { db } from '@/db';
 import { users } from '@/db/schema';
+import { createSession } from '@/lib/session';
 import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
-import { createSession } from './session';
 
 const SignUpFormSchema = z.object({
   name: z
