@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
 export default function useTime() {
-  const [time, setTime] = useState(new Date());
-  const [oneMonthAgo, setOneMonthAgo] = useState(new Date());
-  const [oneMonthLater, setOneMonthLater] = useState(new Date());
+  const [time, setTime] = useState(() => new Date());
+  const [oneMonthAgo, setOneMonthAgo] = useState(() => new Date());
+  const [oneMonthLater, setOneMonthLater] = useState(() => new Date());
 
   useEffect(() => {
     const interval = setInterval(() => {

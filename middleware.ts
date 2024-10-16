@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 export default async function middleware(req: NextRequest) {
-  const protectedRoutes = ['/dashboard'];
+  const protectedRoutes = ['/dashboard', '/profile'];
   const currentPath = req.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.includes(currentPath);
 
