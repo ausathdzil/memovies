@@ -63,6 +63,7 @@ export type Movie = {
   title: string;
   vote_average: number;
   vote_count: number;
+  status_code?: number;
 };
 
 export type TVShow = {
@@ -104,6 +105,7 @@ export type TVShow = {
   type: string;
   vote_average: number;
   vote_count: number;
+  status_code?: number;
 };
 
 export type MovieGenre = {

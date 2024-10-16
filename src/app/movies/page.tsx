@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 export default function Page() {
   return (
-    <main className="p-16 flex flex-col items-center">
+    <main className="p-16 flex flex-col items-center gap-8">
       <NowPlayingSection />
       <PopularSection />
       <TopRatedSection />

@@ -1,9 +1,9 @@
-import { getMovies } from '@/lib/data';
+import { getPopularMovies } from '@/lib/data';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function MoviesSection() {
-  const movies = await getMovies();
+  const movies = await getPopularMovies();
   const filteredMovies = movies
     ? movies.sort((a, b) => b.popularity - a.popularity).splice(0, 6)
     : [];

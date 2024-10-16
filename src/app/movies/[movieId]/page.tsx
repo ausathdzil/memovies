@@ -9,7 +9,7 @@ export default async function Page({
 }) {
   const movie = await getMovie(params.movieId);
 
-  if (!movie) {
+  if (movie?.status_code === 34 || !movie) {
     notFound();
   }
 

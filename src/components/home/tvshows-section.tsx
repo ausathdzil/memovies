@@ -1,9 +1,9 @@
-import { getTVShows } from '@/lib/data';
+import { getPopularTVShows } from '@/lib/data';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function TVShowsSection() {
-  const tvShows = await getTVShows();
+  const tvShows = await getPopularTVShows();
   const filteredTVShows = tvShows
     ? tvShows.sort((a, b) => b.popularity - a.popularity).splice(0, 6)
     : [];

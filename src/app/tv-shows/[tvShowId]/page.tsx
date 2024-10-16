@@ -1,4 +1,4 @@
-import { getTVShow, getTVShows } from '@/lib/data';
+import { getTVShow } from '@/lib/data';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
@@ -9,7 +9,7 @@ export default async function Page({
 }) {
   const tvShow = await getTVShow(params.tvShowId);
 
-  if (!tvShow) {
+  if (tvShow?.status_code === 34 || !tvShow) {
     notFound();
   }
 
