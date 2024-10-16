@@ -47,9 +47,6 @@ export default function LoginForm() {
         {pending && <Loader2 className="animate-spin mr-2" size={16} />}
         <span>Login</span>
       </Button>
-      {state?.message && (
-        <p className="text-destructive text-sm">{state.message}</p>
-      )}
     </form>
   );
 }

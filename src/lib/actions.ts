@@ -12,6 +12,7 @@ const SignUpFormSchema = z.object({
   name: z
     .string()
     .min(2, { message: 'Name must be at least 2 characters long.' })
+    .max(50, { message: 'Name should not exceed 50 characters.' })
     .trim(),
   email: z.string().email({ message: 'Invalid email address.' }).trim(),
   password: z
@@ -126,10 +127,12 @@ export async function login(prevState: LoginState, formData: FormData) {
   const { email, password } = validatedFields.data;
 
   const user = await db.select().from(users).where(eq(users.email, email));
-  if (!user) {
+  if (!user[0]) {
     return {
       success: false,
-      message: 'Invalid login credentials.',
+      errors: {
+        email: ['User not found.'],
+      }
     };
   }
 
@@ -137,7 +140,9 @@ export async function login(prevState: LoginState, formData: FormData) {
   if (!passwordMatch) {
     return {
       success: false,
-      message: 'Invalid login credentials.',
+      errors: {
+        password: ['Incorrect password.'],
+      }
     };
   }
 
