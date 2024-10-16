@@ -9,12 +9,18 @@ export default async function Page({
   searchParams: SearchParams;
 }) {
   const movies = await getDiscoverMovies(searchParams);
+  const search = searchParams.search || '';
+  const filteredMovies = movies?.filter(
+    (movie) =>
+      movie.poster_path &&
+      movie.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <>
-      {movies && (
+      {filteredMovies && (
         <ul className="px-6 pb-6 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
-          {movies.map((movie) => (
+          {filteredMovies.map((movie) => (
             <li
               className="w-full h-full text-center space-y-6 border border-black p-8"
               key={movie.id}

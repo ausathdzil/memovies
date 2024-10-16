@@ -112,8 +112,14 @@ export type MovieGenre = {
 };
 
 export type SearchParams = {
-  sortBy?: string;
+  search?: string;
+  sort_by?: string;
   genre?: string;
   from?: string;
   to?: string;
+  with_release_type?: string;
+  min_date?: string;
+  max_date?: string;
+  without_genres?: string;
+  vote_count?: string;
 };

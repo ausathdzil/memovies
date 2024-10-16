@@ -2,11 +2,23 @@
 
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
 
 export default function SearchForm() {
-  function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log(event.target.value);
-  }
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  const handleSearch = useDebouncedCallback((term: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set('search', term);
+    } else {
+      params.delete('search');
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }, 300);
 
   return (
     <div className="relative p-6">
@@ -18,7 +30,9 @@ export default function SearchForm() {
         type="search"
         id="search"
         placeholder="Search for movies..."
-        onChange={handleSearch}
+        onChange={(e) => {
+          handleSearch(e.target.value);
+        }}
       />
       <Search
         className="absolute top-1/2 left-10 transform -translate-y-1/2"

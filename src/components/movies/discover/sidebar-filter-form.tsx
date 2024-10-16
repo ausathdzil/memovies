@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select';
 import { MovieGenre } from '@/lib/definitions';
 import { Filter } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useRef } from 'react';
 
 export default function SidebarFilterForm({
@@ -21,8 +21,9 @@ export default function SidebarFilterForm({
 }: {
   genres: MovieGenre[] | null;
 }) {
-  const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,19 +42,16 @@ export default function SidebarFilterForm({
       }
     });
 
-    router.push(`/movies/discover?${params.toString()}`);
+    replace(`${pathname}?${params.toString()}`);
   };
 
   return (
     <form onSubmit={handleSubmit} ref={formRef}>
       <div className="p-6 border-b border-black space-y-2">
-        <Label htmlFor="sortBy">Sort By</Label>
-        <Select
-          name="sortBy"
-          defaultValue={searchParams.get('sortBy') || 'popularity.desc'}
-        >
+        <Label htmlFor="sort_by">Sort By</Label>
+        <Select name="sort_by" defaultValue={searchParams.get('sort_by') || ''}>
           <SelectTrigger className="w-full border-black">
-            <SelectValue />
+            <SelectValue placeholder="Select option" />
           </SelectTrigger>
           <SelectContent className="border-black">
             <SelectItem value="popularity.desc">

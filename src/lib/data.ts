@@ -256,8 +256,12 @@ export async function getDiscoverMovies(
   searchParams: SearchParams
 ): Promise<MovieList[] | null> {
   const query = new URLSearchParams();
+  query.append('include_adult', 'false');
+  query.append('include_video', 'false');
+  query.append('language', 'en-US');
+  query.append('page', '1');
 
-  if (searchParams.sortBy) query.append('sort_by', searchParams.sortBy);
+  if (searchParams.sort_by) query.append('sort_by', searchParams.sort_by);
 
   if (searchParams.genre)
     query.append('with_genres', searchParams.genre.toString());
@@ -268,9 +272,24 @@ export async function getDiscoverMovies(
   if (searchParams.to)
     query.append('primary_release_date.lte', searchParams.to);
 
+  if (searchParams.with_release_type)
+    query.append('with_release_type', searchParams.with_release_type);
+
+  if (searchParams.min_date)
+    query.append('release_date.gte', searchParams.min_date);
+
+  if (searchParams.max_date)
+    query.append('release_date.lte', searchParams.max_date);
+
+  if (searchParams.without_genres)
+    query.append('without_genres', searchParams.without_genres);
+
+  if (searchParams.vote_count)
+    query.append('vote_count.gte', searchParams.vote_count);
+
   try {
     const res = await fetch(
-      `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1${query}`,
+      `https://api.themoviedb.org/3/discover/movie?${query}`,
       {
         method: 'GET',
         headers: {
