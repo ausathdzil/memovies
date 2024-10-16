@@ -57,16 +57,14 @@ export default function SignUpForm() {
           <></>
         )}
       </div>
-
       <Button
         className="w-full bg-background text-primary hover:bg-teal-400 border-2 border-black"
         disabled={pending}
         type="submit"
       >
-        {pending && <Loader2 className="animate-spin mr-2" />}
+        {pending && <Loader2 className="animate-spin mr-2" size={16} />}
         <span>Sign up</span>
       </Button>
-
       {state?.message && (
         <p className="text-destructive text-sm">{state.message}</p>
       )}

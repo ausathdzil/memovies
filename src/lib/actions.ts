@@ -129,7 +129,7 @@ export async function login(prevState: LoginState, formData: FormData) {
   if (!user) {
     return {
       success: false,
-      message: 'Invalid login credentials',
+      message: 'Invalid login credentials.',
     };
   }
 
@@ -137,7 +137,7 @@ export async function login(prevState: LoginState, formData: FormData) {
   if (!passwordMatch) {
     return {
       success: false,
-      message: 'Invalid login credentials',
+      message: 'Invalid login credentials.',
     };
   }
 
