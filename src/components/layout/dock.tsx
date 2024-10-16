@@ -13,13 +13,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function FloatingDock() {
-  const currentPath = usePathname();
+  const pathname = usePathname();
 
   return (
     <div
       className={clsx(
-        `fixed left-1/2 transform -translate-x-1/2 bg-primary-foreground/70 backdrop-filter backdrop-blur-lg rounded-full px-6 py-3 border-2 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]`,
-        currentPath.startsWith('/movies/discover') ? 'bottom-6' : 'top-4'
+        `fixed left-1/2 top-4 transform -translate-x-1/2 bg-primary-foreground/70 backdrop-filter backdrop-blur-lg rounded-full px-6 py-3 border-2 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]`,
+        pathname.startsWith('/movies/discover') && 'hidden'
       )}
     >
       <nav>

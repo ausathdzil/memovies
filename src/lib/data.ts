@@ -254,7 +254,7 @@ export async function getMovieGenres(): Promise<MovieGenre[] | null> {
 
 export async function getDiscoverMovies(
   searchParams: SearchParams
-): Promise<MovieList[] | null> {
+): Promise<{ results: MovieList[]; pages: number } | null> {
   const query = new URLSearchParams();
   query.append('include_adult', 'false');
   query.append('include_video', 'false');
@@ -267,10 +267,10 @@ export async function getDiscoverMovies(
     query.append('with_genres', searchParams.genre.toString());
 
   if (searchParams.from)
-    query.append('primary_release_date.gte', searchParams.from);
+    query.append('release_date.gte', `${searchParams.from}-01-01`);
 
   if (searchParams.to)
-    query.append('primary_release_date.lte', searchParams.to);
+    query.append('release_date.lte', `${searchParams.to}-01-01`);
 
   if (searchParams.with_release_type)
     query.append('with_release_type', searchParams.with_release_type);
@@ -299,7 +299,10 @@ export async function getDiscoverMovies(
       }
     );
     const data = await res.json();
-    return data.results;
+    return {
+      results: data.results,
+      pages: data.total_pages,
+    };
   } catch (error) {
     return null;
   }

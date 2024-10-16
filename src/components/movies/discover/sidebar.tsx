@@ -2,12 +2,28 @@
 
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { MovieGenre } from '@/lib/definitions';
-import { Calendar, Clock, Film, Star, Trophy } from 'lucide-react';
+import useTime from '@/lib/hooks';
+import {
+  Calendar,
+  Clock,
+  Film,
+  Home,
+  LayoutDashboard,
+  Star,
+  Trophy,
+  Tv,
+  User,
+} from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import SidebarFilterForm from './sidebar-filter-form';
-import useTime from '@/lib/hooks';
 
 export default function MovieListSideBar({
   genres,
@@ -41,13 +57,41 @@ export default function MovieListSideBar({
   return (
     <ScrollArea className="hidden lg:block min-w-fit border-r-2 border-black">
       <div className="p-6 border-b border-black">
-        <Link
-          className="flex items-center justify-center hover:text-teal-500 transition ease-in-out"
-          href="/"
-        >
-          <Film className="mr-2" size={24} />
-          <span className="text-lg font-semibold">Memovies</span>
-        </Link>
+        <nav>
+          <ul className="flex space-x-4 sm:space-x-6">
+            <TooltipProvider>
+              {[
+                { name: 'Home', href: '/', icon: Home },
+                { name: 'Movies', href: '/movies', icon: Film },
+                { name: 'TV Shows', href: '/tv-shows', icon: Tv },
+                {
+                  name: 'Dashboard',
+                  href: '/dashboard',
+                  icon: LayoutDashboard,
+                },
+                { name: 'Profile', href: '/profile', icon: User },
+              ].map((link) => (
+                <li key={link.name}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link href={link.href}>
+                        <Button
+                          className="p-2 rounded-full"
+                          variant="ghost"
+                          size="icon"
+                          aria-label={link.name}
+                        >
+                          <link.icon className="hover:scale-105 transition-transform" />
+                        </Button>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">{link.name}</TooltipContent>
+                  </Tooltip>
+                </li>
+              ))}
+            </TooltipProvider>
+          </ul>
+        </nav>
       </div>
       <nav className="p-6 border-b border-black">
         <ul className="space-y-4">
