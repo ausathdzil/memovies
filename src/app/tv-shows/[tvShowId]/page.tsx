@@ -9,7 +9,7 @@ export default async function Page({
 }) {
   const tvShow = await getTVShow(params.tvShowId);
 
-  if (tvShow?.status_code === 34 || !tvShow) {
+  if (tvShow?.success === false || !tvShow) {
     notFound();
   }
 

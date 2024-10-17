@@ -10,7 +10,7 @@ export type Payload = {
   expiresAt: Date;
 };
 
-export async function encryppt(payload: Payload) {
+export async function encrypt(payload: Payload) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -31,7 +31,7 @@ export async function decrypt(session: string | undefined = '') {
 
 export async function createSession(userId: string) {
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
-  const session = await encryppt({ userId, expiresAt });
+  const session = await encrypt({ userId, expiresAt });
 
   cookies().set('session', session, {
     httpOnly: true,
