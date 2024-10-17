@@ -2,6 +2,7 @@ import 'server-only';
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { cache } from 'react';
 
 const key = new TextEncoder().encode(process.env.SECRET);
 
@@ -44,7 +45,7 @@ export async function createSession(userId: string) {
   redirect('/dashboard');
 }
 
-export async function verifySession() {
+export const verifySession = cache(async () => {
   const sessionCookie = cookies().get('session')?.value;
   const session = await decrypt(sessionCookie);
 
@@ -52,7 +53,26 @@ export async function verifySession() {
     redirect('/login');
   }
 
-  return { userId: session.userId };
+  return { isAuth: true, userId: session.userId };
+});
+
+export async function updateSession() {
+  const session = cookies().get('session')?.value;
+  const payload = await decrypt(session);
+
+  if (!session || !payload) {
+    return null;
+  }
+
+  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+  cookies().set('session', session, {
+    httpOnly: true,
+    secure: true,
+    expires: expiresAt,
+    sameSite: 'lax' as 'lax',
+    path: '/',
+  });
 }
 
 export async function deleteSession() {

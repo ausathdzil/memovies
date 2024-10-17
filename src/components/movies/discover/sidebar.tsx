@@ -56,9 +56,9 @@ export default function MovieListSideBar({
 
   return (
     <ScrollArea className="hidden lg:block min-w-fit border-r-2 border-black">
-      <div className="p-6 border-b border-black">
+      <div className="w-full p-6 border-b border-black flex justify-center">
         <nav>
-          <ul className="flex space-x-4 sm:space-x-6">
+          <ul className="flex space-x-4">
             <TooltipProvider>
               {[
                 { name: 'Home', href: '/', icon: Home },

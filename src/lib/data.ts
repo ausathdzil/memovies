@@ -14,26 +14,17 @@ import { cache } from 'react';
 
 export const getUser = cache(async () => {
   const session = await verifySession();
-  const data = await db
-    .select()
+
+  const user = await db
+    .select({
+      name: users.name,
+      email: users.email,
+    })
     .from(users)
     .where(eq(users.id, session.userId as string));
-  const user = data[0];
-  const filteredUser = userDTO(user);
-  return filteredUser;
-});
 
-function userDTO(user: {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-}) {
-  return {
-    name: user.name,
-    email: user.email,
-  };
-}
+  return user[0];
+});
 
 export async function getMovie(movieId: number): Promise<Movie | null> {
   const query = new URLSearchParams();

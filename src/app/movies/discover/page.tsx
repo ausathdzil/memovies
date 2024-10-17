@@ -1,5 +1,6 @@
 import { getDiscoverMovies } from '@/lib/data';
 import { SearchParams } from '@/lib/definitions';
+import { Frown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -19,8 +20,9 @@ export default async function Page({
 
   if (!filteredMovies?.length) {
     return (
-      <div className="px-6">
-        <p>No movies found with name: {search}</p>
+      <div className="w-full h-full flex flex-col justify-center items-center gap-2">
+        <Frown size={64} />
+        <h1 className="text-5xl font-bold">No movies found</h1>
       </div>
     );
   }

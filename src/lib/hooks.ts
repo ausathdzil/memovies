@@ -1,24 +1,54 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer } from 'react';
+
+type TimeState = {
+  time: Date;
+  oneMonthAgo: Date;
+  oneMonthLater: Date;
+};
+
+type TimeAction = { type: 'UPDATE_TIME'; payload: Date };
+
+function timeReducer(state: TimeState, action: TimeAction): TimeState {
+  switch (action.type) {
+    case 'UPDATE_TIME': {
+      const currentTime = action.payload;
+      return {
+        time: currentTime,
+        oneMonthAgo: new Date(
+          currentTime.getFullYear(),
+          currentTime.getMonth() - 1,
+          currentTime.getDate()
+        ),
+        oneMonthLater: new Date(
+          currentTime.getFullYear(),
+          currentTime.getMonth() + 1,
+          currentTime.getDate()
+        ),
+      };
+    }
+    default:
+      return state;
+  }
+}
 
 export default function useTime() {
-  const [time, setTime] = useState(() => new Date());
-  const [oneMonthAgo, setOneMonthAgo] = useState(() => new Date());
-  const [oneMonthLater, setOneMonthLater] = useState(() => new Date());
+  const initialState: TimeState = {
+    time: new Date(),
+    oneMonthAgo: new Date(),
+    oneMonthLater: new Date(),
+  };
+
+  const [state, dispatch] = useReducer(timeReducer, initialState);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(new Date());
-      setOneMonthAgo(
-        new Date(time.getFullYear(), time.getMonth() - 1, time.getDate())
-      );
-      setOneMonthLater(
-        new Date(time.getFullYear(), time.getMonth() + 1, time.getDate())
-      );
+      dispatch({ type: 'UPDATE_TIME', payload: new Date() });
     }, 3600000);
     return () => clearInterval(interval);
-  }, [time]);
+  }, []);
+
   return {
-    oneMonthAgo,
-    oneMonthLater,
+    oneMonthAgo: state.oneMonthAgo,
+    oneMonthLater: state.oneMonthLater,
   };
 }

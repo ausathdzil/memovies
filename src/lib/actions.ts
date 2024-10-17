@@ -66,22 +66,19 @@ export async function signup(prevState: SignUpState, formData: FormData) {
     };
   }
 
-  const data = await db
+  const user = await db
     .insert(users)
     .values({ name, email, password: hashedPassword })
     .returning({ id: users.id });
 
-  const user = data[0];
-
-  if (!user) {
+  if (!user[0]) {
     return {
       success: false,
       message: 'Sign up failed.',
     };
   }
 
-  await createSession(user.id);
-
+  await createSession(user[0].id);
   redirect('/dashboard');
 }
 
@@ -131,8 +128,8 @@ export async function login(prevState: LoginState, formData: FormData) {
     return {
       success: false,
       errors: {
-        email: ['User not found.'],
-      }
+        email: ['Email not found.'],
+      },
     };
   }
 
@@ -142,7 +139,7 @@ export async function login(prevState: LoginState, formData: FormData) {
       success: false,
       errors: {
         password: ['Incorrect password.'],
-      }
+      },
     };
   }
 
