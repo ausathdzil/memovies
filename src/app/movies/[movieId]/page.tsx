@@ -2,11 +2,10 @@ import { getMovie } from '@/lib/data';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
-export default async function Page({
-  params,
-}: {
-  params: { movieId: number };
+export default async function Page(props: {
+  params: Promise<{ movieId: number }>;
 }) {
+  const params = await props.params;
   const movie = await getMovie(params.movieId);
 
   if (movie?.success === false || !movie) {

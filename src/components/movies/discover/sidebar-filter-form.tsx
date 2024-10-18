@@ -26,7 +26,7 @@ export default function SidebarFilterForm({
 }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const router = useRouter();
+  const { replace } = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -45,7 +45,7 @@ export default function SidebarFilterForm({
       }
     });
 
-    router.replace(`${pathname}?${params.toString()}`);
+    replace(`${pathname}?${params.toString()}`);
   };
 
   return (

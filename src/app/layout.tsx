@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   description: 'Save your precious memories.',
 };
 
+export const fetchCache = 'default-cache';
+
 export default function RootLayout({
   children,
 }: Readonly<{

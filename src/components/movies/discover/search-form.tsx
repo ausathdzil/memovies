@@ -21,23 +21,29 @@ export default function SearchForm() {
   }, 300);
 
   return (
-    <div className="relative p-6">
+    <div className="p-6">
       <label className="sr-only" htmlFor="search">
         Search
       </label>
-      <Input
-        className="pl-12"
-        type="search"
-        id="search"
-        placeholder="Search for movies..."
-        onChange={(e) => {
-          handleSearch(e.target.value);
-        }}
-      />
-      <Search
-        className="absolute top-1/2 left-10 transform -translate-y-1/2"
-        size={20}
-      />
+      <div className="relative">
+        <Input
+          id="search"
+          name="search"
+          className="peer pl-9"
+          placeholder="Search a movie..."
+          type="search"
+          defaultValue={searchParams.get('search') as string}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 text-muted-foreground/80 peer-disabled:opacity-50">
+          <Search
+            size={16}
+            strokeWidth={2}
+            aria-hidden="true"
+            role="presentation"
+          />
+        </div>
+      </div>
     </div>
   );
 }

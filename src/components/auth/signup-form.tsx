@@ -4,11 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { signup } from '@/lib/actions';
-import { Loader2 } from 'lucide-react';
-import { startTransition, useActionState } from 'react';
+import clsx from 'clsx';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { startTransition, useActionState, useState } from 'react';
 
 export default function SignUpForm() {
   const [state, formAction, pending] = useActionState(signup, undefined);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const toggleVisibility = () => setIsVisible(!isVisible);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -21,7 +25,16 @@ export default function SignUpForm() {
     <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="space-y-1">
         <Label htmlFor="name">Name</Label>
-        <Input type="text" name="name" placeholder="Enter your name" />
+        <Input
+          className={
+            state?.errors?.name &&
+            'border-destructive/80 text-destructive focus-visible:border-destructive/80 focus-visible:ring-destructive/30'
+          }
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Enter your name"
+        />
         {state?.errors?.name && (
           <p className="text-destructive text-sm">
             {state.errors.name.join(', ')}
@@ -30,7 +43,16 @@ export default function SignUpForm() {
       </div>
       <div className="space-y-1">
         <Label htmlFor="email">Email</Label>
-        <Input type="email" name="email" placeholder="email@example.com" />
+        <Input
+          className={
+            state?.errors?.email &&
+            'border-destructive/80 text-destructive focus-visible:border-destructive/80 focus-visible:ring-destructive/30'
+          }
+          type="email"
+          name="email"
+          id="email"
+          placeholder="email@example.com"
+        />
         {state?.errors?.email && (
           <p className="text-destructive text-sm">
             {state.errors.email.join(', ')}
@@ -39,12 +61,44 @@ export default function SignUpForm() {
       </div>
       <div className="space-y-1">
         <Label htmlFor="password">Password</Label>
-        <Input
-          type="password"
-          name="password"
-          placeholder="Enter a unique password"
-        />
-        {state?.errors?.password?.length ? (
+        <div className="relative">
+          <Input
+            className={clsx(
+              'pr,9',
+              state?.errors?.password &&
+                'border-destructive/80 text-destructive focus-visible:border-destructive/80 focus-visible:ring-destructive/30'
+            )}
+            type={isVisible ? 'text' : 'password'}
+            id="password"
+            name="password"
+            placeholder="Enter a unique password"
+          />
+          <button
+            className="absolute inset-y-px right-px flex h-full w-9 items-center justify-center rounded-r-lg text-muted-foreground/80 ring-offset-background transition-shadow hover:text-foreground focus-visible:border focus-visible:border-ring focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+            type="button"
+            onClick={toggleVisibility}
+            aria-label={isVisible ? 'Hide password' : 'Show password'}
+            aria-pressed={isVisible}
+            aria-controls="password"
+          >
+            {isVisible ? (
+              <EyeOff
+                size={16}
+                strokeWidth={2}
+                aria-hidden="true"
+                role="presentation"
+              />
+            ) : (
+              <Eye
+                size={16}
+                strokeWidth={2}
+                aria-hidden="true"
+                role="presentation"
+              />
+            )}
+          </button>
+        </div>
+        {state?.errors?.password && (
           <div className="text-destructive text-sm">
             <p>Password must:</p>
             <ul>
@@ -53,8 +107,6 @@ export default function SignUpForm() {
               ))}
             </ul>
           </div>
-        ) : (
-          <></>
         )}
       </div>
       <Button

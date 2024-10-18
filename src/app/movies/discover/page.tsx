@@ -4,11 +4,10 @@ import { Frown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: SearchParams;
+export default async function Page(props: {
+  searchParams: Promise<SearchParams>;
 }) {
+  const searchParams = await props.searchParams;
   const data = await getDiscoverMovies(searchParams);
   const movies = data?.results;
   const search = searchParams.search || '';

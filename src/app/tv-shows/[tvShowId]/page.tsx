@@ -2,11 +2,10 @@ import { getTVShow } from '@/lib/data';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
-export default async function Page({
-  params,
-}: {
-  params: { tvShowId: number };
+export default async function Page(props: {
+  params: Promise<{ tvShowId: number }>;
 }) {
+  const params = await props.params;
   const tvShow = await getTVShow(params.tvShowId);
 
   if (tvShow?.success === false || !tvShow) {
