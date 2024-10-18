@@ -17,8 +17,8 @@ export const getUser = cache(async () => {
 
   const user = await db
     .select({
+      id: users.id,
       name: users.name,
-      email: users.email,
     })
     .from(users)
     .where(eq(users.id, session.userId as string));
