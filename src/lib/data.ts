@@ -1,5 +1,11 @@
 import { db } from '@/db';
-import { users } from '@/db/schema';
+import {
+  collectionMedia,
+  collections,
+  movies,
+  userMedia,
+  users,
+} from '@/db/schema';
 import {
   Movie,
   MovieGenre,
@@ -9,7 +15,7 @@ import {
   TVShowList,
 } from '@/lib/definitions';
 import { verifySession } from '@/lib/session';
-import { eq } from 'drizzle-orm';
+import { and, eq, inArray } from 'drizzle-orm';
 import { cache } from 'react';
 
 export const getUser = cache(async () => {
@@ -331,4 +337,77 @@ export async function getDiscoverMovies(
   } catch (error) {
     return null;
   }
+}
+
+export async function getUserMedia(userId: string) {
+  const media = await db
+    .select()
+    .from(userMedia)
+    .where(eq(userMedia.userId, userId));
+
+  return media;
+}
+
+export async function getLikedCollection(userId: string) {
+  const collection = await db
+    .select()
+    .from(collections)
+    .where(and(eq(collections.userId, userId), eq(collections.name, 'Liked')))
+    .limit(1);
+
+  return collection[0];
+}
+
+export async function isMediaLiked(userId: string, tmdbId: number) {
+  const media = await getUserMedia(userId);
+  
+  const currentMedia = media.filter((m) => m.tmdbId === tmdbId);
+  if (currentMedia.length === 0) {
+    return false;
+  }
+
+  const likedCollection = await getLikedCollection(userId);
+  if (!likedCollection) {
+    return false;
+  }
+  const collectionId = likedCollection.id;
+
+  const likedMedia = await db
+    .select()
+    .from(collectionMedia)
+    .where(
+      and(
+        eq(collectionMedia.collectionId, collectionId),
+        eq(collectionMedia.mediaId, currentMedia[0].id)
+      )
+    )
+    .limit(1);
+
+  return likedMedia.length > 0;
+}
+
+export async function getLikedMovies(userId: string) {
+  const likedCollection = await getLikedCollection(userId);
+  if (!likedCollection) {
+    return [];
+  }
+  const collectionId = likedCollection.id;
+
+  const likedMedia = await db
+    .select({
+      mediaId: collectionMedia.mediaId,
+    })
+    .from(collectionMedia)
+    .where(eq(collectionMedia.collectionId, collectionId));
+  if (likedMedia.length === 0) {
+    return [];
+  }
+  const mediaIdList = likedMedia.map((m) => m.mediaId);
+
+  const likedMovies = await db
+    .select()
+    .from(movies)
+    .where(inArray(movies.mediaId, mediaIdList));
+
+  return likedMovies;
 }
