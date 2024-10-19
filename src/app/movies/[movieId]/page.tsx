@@ -20,8 +20,8 @@ export default async function Page(props: {
   const isLiked = await isMediaLiked(session.userId as string, movie.id);
 
   return (
-    <main className="min-h-[calc(100vh-94px)] flex flex-col justify-center p-8 mx-auto">
-      <div className="mt-16 xl:mt-16 relative max-w-4xl mx-auto min-h-[450px] overflow-hidden rounded-lg border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)]">
+    <main className="min-h-[calc(100vh-168px)] flex flex-col justify-center mx-auto">
+      <div className="relative max-w-4xl mx-auto min-h-[450px] overflow-hidden rounded-lg border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)]">
         <Image
           className="object-cover object-top"
           src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}

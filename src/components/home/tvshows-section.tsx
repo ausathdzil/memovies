@@ -13,7 +13,7 @@ export default async function TVShowsSection() {
       {tvShows && (
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-8">
           {filteredTVShows.map((tvShow) => (
-            <li className="text-center space-y-4" key={tvShow.id}>
+            <li className="flex flex-col items-center text-center space-y-4" key={tvShow.id}>
               <Link href={`/tv-shows/${tvShow.id}`}>
                 <div className="relative w-[256px] h-[384px]">
                   <Image

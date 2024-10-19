@@ -3,6 +3,7 @@ import Footer from '@/components/layout/footer';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
+import Header from '@/components/layout/header';
 
 const manrope = localFont({
   src: './fonts/Manrope-VariableFont_wght.ttf',
@@ -24,7 +25,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/icon.svg" />
+      </head>
       <body className={`${manrope.className} antialiased`}>
+        <Header />
         {children}
         <FloatingDock />
         <Footer />

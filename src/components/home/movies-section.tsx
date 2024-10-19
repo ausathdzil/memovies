@@ -9,11 +9,11 @@ export default async function MoviesSection() {
     : [];
 
   return (
-    <section className="mt-2 sm:w-full sm:max-w-4xl">
+    <section className="sm:w-full sm:max-w-4xl">
       {movies && (
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-8">
           {filteredMovies.map((movie) => (
-            <li className="text-center space-y-4" key={movie.id}>
+            <li className="flex flex-col items-center text-center space-y-4" key={movie.id}>
               <Link href={`/movies/${movie.id}`}>
                 <div className="relative w-[256px] h-[384px]">
                   <Image

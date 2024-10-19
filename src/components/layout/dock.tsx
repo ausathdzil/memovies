@@ -18,12 +18,12 @@ export default function FloatingDock() {
   return (
     <div
       className={clsx(
-        `fixed left-1/2 top-4 transform -translate-x-1/2 bg-primary-foreground/70 backdrop-filter backdrop-blur-lg rounded-full px-6 py-3 border-2 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]`,
+        `fixed left-1/2 bottom-10 transform -translate-x-1/2 bg-primary-foreground/70 backdrop-filter backdrop-blur-lg rounded-full px-5 py-3 border-2 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]`,
         pathname.startsWith('/movies/discover') && 'hidden'
       )}
     >
       <nav>
-        <ul className="flex space-x-4 sm:space-x-6">
+        <ul className="flex space-x-4">
           <TooltipProvider>
             {[
               { name: 'Home', href: '/', icon: Home },
@@ -42,7 +42,7 @@ export default function FloatingDock() {
                         size="icon"
                         aria-label={link.name}
                       >
-                        <link.icon className="hover:scale-105 transition-transform" />
+                        <link.icon className="hover:scale-105 transition-transform" size={16} />
                       </Button>
                     </Link>
                   </TooltipTrigger>

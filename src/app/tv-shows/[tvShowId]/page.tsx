@@ -13,8 +13,8 @@ export default async function Page(props: {
   }
 
   return (
-    <main className="min-h-[calc(100vh-94px)] flex flex-col justify-center p-8 mx-auto">
-      <div className="mt-16 xl:mt-12 relative max-w-4xl mx-auto min-h-[450px] overflow-hidden rounded-lg border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)]">
+    <main className="min-h-[calc(100vh-168px)] flex flex-col justify-center mx-auto">
+      <div className="relative max-w-4xl mx-auto min-h-[450px] overflow-hidden rounded-lg border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)]">
         <Image
           className="object-cover object-top"
           src={`https://image.tmdb.org/t/p/w1280${tvShow.backdrop_path}`}
@@ -23,7 +23,7 @@ export default async function Page(props: {
           priority
           fill
         />
-        <div className="absolute inset-0 bg-primary/75 backdrop-filter backdrop-blur-sm rounded-lg" />
+        <div className="absolute inset-0 bg-primary/85 backdrop-filter rounded-lg" />
         <div className="relative flex flex-col lg:flex-row items-center lg:items-start gap-8 p-8">
           <div className="relative w-[180px] sm:w-[256px] h-[270px] sm:h-[384px] flex-shrink-0 overflow-hidden rounded-lg border-2 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
             <Image

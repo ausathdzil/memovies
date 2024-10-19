@@ -13,7 +13,7 @@ export default function Page() {
       <PopularSection />
       <TopRatedSection />
       <UpcomingSection />
-      <Link className="text-lg hover:underline" href="/movies/discover">
+      <Link href="/movies/discover">
         <Button className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-teal-500 text-black hover:bg-black hover:text-white">
           <span>Discover more movies</span>
           <ArrowRight className="ml-2" />
