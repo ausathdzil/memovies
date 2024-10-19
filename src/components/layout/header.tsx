@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export default function Header() {
+export default function Header({ isAuth }: { isAuth: boolean }) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -25,7 +25,7 @@ export default function Header() {
       className={clsx(
         pathname === '/movies/discover'
           ? 'hidden'
-          : 'sticky top-0 z-50 bg-zinc-50 shadow-sm',
+          : 'sticky top-0 z-50 shadow-sm',
         isScrolled && 'bg-background/80 backdrop-blur-md'
       )}
     >
@@ -52,14 +52,25 @@ export default function Header() {
           </Link>
         </div>
         <div className="flex grow justify-end items-center">
-          <Link
-            className="h-full sm:border-l-2 border-black flex items-center px-4 sm:px-6"
-            href="/login"
-          >
-            <Button className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-zinc-50 text-black hover:bg-teal-400">
-              Get Started
-            </Button>
-          </Link>
+          {isAuth ? (
+            <Link
+              className="h-full sm:border-l-2 border-black flex items-center px-4 sm:px-6"
+              href="/dashboard"
+            >
+              <Button className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-zinc-50 text-black hover:bg-teal-400">
+                Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <Link
+              className="h-full sm:border-l-2 border-black flex items-center px-4 sm:px-6"
+              href="/login"
+            >
+              <Button className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-zinc-50 text-black hover:bg-teal-400">
+                Get Started
+              </Button>
+            </Link>
+          )}
         </div>
       </nav>
     </header>

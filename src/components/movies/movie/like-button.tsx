@@ -7,6 +7,10 @@ import clsx from 'clsx';
 import { Heart, Loader2 } from 'lucide-react';
 import { useState, useTransition } from 'react';
 
+type Liked = {
+  liked: boolean;
+};
+
 export default function LikeButton({
   movie,
   userId,
@@ -18,13 +22,15 @@ export default function LikeButton({
 }) {
   const [liked, setLiked] = useState(initialLiked);
   const [pending, startTransition] = useTransition();
+  const removeMoviesFromLikedWithId = removeMoviesFromLiked.bind(null, userId);
+  const addMoviesToLikedWithId = addMoviesToLiked.bind(null, userId);
 
   const handleAction = async (formData: FormData) => {
     startTransition(async () => {
       if (liked) {
-        await removeMoviesFromLiked(userId, formData);
+        await removeMoviesFromLikedWithId(formData);
       } else {
-        await addMoviesToLiked(userId, formData);
+        await addMoviesToLikedWithId(formData);
       }
       setLiked(!liked);
     });

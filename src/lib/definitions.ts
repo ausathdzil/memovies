@@ -83,7 +83,7 @@ export type MovieGenre = {
 };
 
 export type SearchParams = {
-  search?: string;
+  query?: string;
   sort_by?: string;
   genre?: string;
   from?: string;

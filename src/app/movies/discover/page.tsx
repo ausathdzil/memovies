@@ -1,4 +1,4 @@
-import { getDiscoverMovies } from '@/lib/data';
+import { getDiscoverMovies, getSearchMovies } from '@/lib/data';
 import { SearchParams } from '@/lib/definitions';
 import { Frown } from 'lucide-react';
 import Image from 'next/image';
@@ -8,16 +8,18 @@ export default async function Page(props: {
   searchParams: Promise<SearchParams>;
 }) {
   const searchParams = await props.searchParams;
-  const data = await getDiscoverMovies(searchParams);
-  const movies = data?.results;
-  const search = searchParams.search || '';
-  const filteredMovies = movies?.filter(
-    (movie) =>
-      movie.poster_path &&
-      movie.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const query = searchParams.query || '';
 
-  if (!filteredMovies?.length) {
+  let movies;
+  if (query) {
+    const searchData = await getSearchMovies(query);
+    movies = searchData?.results;
+  } else {
+    const discoverData = await getDiscoverMovies(searchParams);
+    movies = discoverData?.results;
+  }
+
+  if (!movies || movies.length === 0) {
     return (
       <div className="w-full h-full flex flex-col justify-center items-center gap-2">
         <Frown size={64} />
@@ -28,7 +30,7 @@ export default async function Page(props: {
 
   return (
     <ul className="px-6 pb-6 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
-      {filteredMovies.map((movie) => (
+      {movies.map((movie) => (
         <li
           className="w-full h-full text-center space-y-6 border border-black p-8"
           key={movie.id}

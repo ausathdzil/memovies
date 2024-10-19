@@ -3,7 +3,7 @@ import PopularSection from '@/components/movies/popular-section';
 import TopRatedSection from '@/components/movies/top-rated-section';
 import UpcomingSection from '@/components/movies/upcoming-section';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { Film } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Page() {
@@ -14,9 +14,9 @@ export default function Page() {
       <TopRatedSection />
       <UpcomingSection />
       <Link href="/movies/discover">
-        <Button className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-teal-500 text-black hover:bg-black hover:text-white">
-          <span>Discover more movies</span>
-          <ArrowRight className="ml-2" />
+        <Button className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-teal-400 text-black hover:bg-black hover:text-white py-6 px-8 text-lg flex items-center">
+          <Film className="mr-2" />
+          <span>Discover movies</span>
         </Button>
       </Link>
     </main>

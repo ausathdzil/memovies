@@ -1,5 +1,6 @@
 'use client';
 
+import SidebarFilterForm from '@/components/movies/discover/sidebar-filter-form';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
@@ -23,7 +24,6 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import SidebarFilterForm from './sidebar-filter-form';
 
 export default function MovieListSideBar({
   genres,

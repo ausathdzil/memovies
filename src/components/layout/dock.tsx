@@ -37,7 +37,7 @@ export default function FloatingDock() {
                   <TooltipTrigger asChild>
                     <Link href={link.href}>
                       <Button
-                        className="p-2 rounded-full"
+                        className="p-2 rounded-full hover:bg-zinc-50"
                         variant="ghost"
                         size="icon"
                         aria-label={link.name}

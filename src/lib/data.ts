@@ -34,7 +34,6 @@ export const getUser = cache(async () => {
 
 export async function getMovie(movieId: number): Promise<Movie | null> {
   const query = new URLSearchParams();
-  query.append('language', 'en-US');
 
   try {
     const res = await fetch(
@@ -56,7 +55,6 @@ export async function getMovie(movieId: number): Promise<Movie | null> {
 
 export async function getTVShow(tvShowId: number): Promise<TVShow | null> {
   const query = new URLSearchParams();
-  query.append('language', 'en-US');
 
   try {
     const res = await fetch(
@@ -78,10 +76,7 @@ export async function getTVShow(tvShowId: number): Promise<TVShow | null> {
 
 export async function getNowPlayingMovies(): Promise<MovieList[] | null> {
   const query = new URLSearchParams();
-  query.append('include_adult', 'false');
   query.append('include_video', 'false');
-  query.append('language', 'en-US');
-  query.append('page', '1');
 
   try {
     const res = await fetch('https://api.themoviedb.org/3/movie/now_playing', {
@@ -100,10 +95,7 @@ export async function getNowPlayingMovies(): Promise<MovieList[] | null> {
 
 export async function getPopularMovies(): Promise<MovieList[] | null> {
   const query = new URLSearchParams();
-  query.append('include_adult', 'false');
   query.append('include_video', 'false');
-  query.append('language', 'en-US');
-  query.append('page', '1');
 
   try {
     const res = await fetch('https://api.themoviedb.org/3/movie/popular', {
@@ -122,10 +114,7 @@ export async function getPopularMovies(): Promise<MovieList[] | null> {
 
 export async function getTopRatedMovies(): Promise<MovieList[] | null> {
   const query = new URLSearchParams();
-  query.append('include_adult', 'false');
   query.append('include_video', 'false');
-  query.append('language', 'en-US');
-  query.append('page', '1');
 
   try {
     const res = await fetch('https://api.themoviedb.org/3/movie/top_rated', {
@@ -144,10 +133,7 @@ export async function getTopRatedMovies(): Promise<MovieList[] | null> {
 
 export async function getUpcomingMovies(): Promise<MovieList[] | null> {
   const query = new URLSearchParams();
-  query.append('include_adult', 'false');
   query.append('include_video', 'false');
-  query.append('language', 'en-US');
-  query.append('page', '1');
 
   try {
     const res = await fetch('https://api.themoviedb.org/3/movie/upcoming', {
@@ -166,10 +152,7 @@ export async function getUpcomingMovies(): Promise<MovieList[] | null> {
 
 export async function getAiringToday(): Promise<TVShowList[] | null> {
   const query = new URLSearchParams();
-  query.append('include_adult', 'false');
   query.append('include_video', 'false');
-  query.append('language', 'en-US');
-  query.append('page', '1');
 
   try {
     const res = await fetch(
@@ -191,10 +174,7 @@ export async function getAiringToday(): Promise<TVShowList[] | null> {
 
 export async function getOnTheAir(): Promise<TVShowList[] | null> {
   const query = new URLSearchParams();
-  query.append('include_adult', 'false');
   query.append('include_video', 'false');
-  query.append('language', 'en-US');
-  query.append('page', '1');
 
   try {
     const res = await fetch(
@@ -216,10 +196,7 @@ export async function getOnTheAir(): Promise<TVShowList[] | null> {
 
 export async function getPopularTVShows(): Promise<TVShowList[] | null> {
   const query = new URLSearchParams();
-  query.append('include_adult', 'false');
   query.append('include_video', 'false');
-  query.append('language', 'en-US');
-  query.append('page', '1');
 
   try {
     const res = await fetch(
@@ -241,10 +218,7 @@ export async function getPopularTVShows(): Promise<TVShowList[] | null> {
 
 export async function getTopRatedTVShows(): Promise<TVShowList[] | null> {
   const query = new URLSearchParams();
-  query.append('include_adult', 'false');
   query.append('include_video', 'false');
-  query.append('language', 'en-US');
-  query.append('page', '1');
 
   try {
     const res = await fetch(
@@ -287,10 +261,7 @@ export async function getDiscoverMovies(
   searchParams: SearchParams
 ): Promise<{ results: MovieList[]; pages: number } | null> {
   const query = new URLSearchParams();
-  query.append('include_adult', 'false');
   query.append('include_video', 'false');
-  query.append('language', 'en-US');
-  query.append('page', '1');
 
   if (searchParams.sort_by) query.append('sort_by', searchParams.sort_by);
 
@@ -339,13 +310,41 @@ export async function getDiscoverMovies(
   }
 }
 
-export async function getUserMedia(userId: string) {
+export async function getSearchMovies(
+  query: string
+): Promise<{ results: MovieList[]; pages: number } | null> {
+  const searchParams = new URLSearchParams();
+  searchParams.append('include_adult', 'false');
+  searchParams.append('query', query);
+
+  try {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/search/movie?${searchParams}`,
+      {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+        },
+      }
+    );
+    const data = await res.json();
+    return {
+      results: data.results,
+      pages: data.total_pages,
+    };
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function getUserMedia(userId: string, tmdbId: number) {
   const media = await db
     .select()
     .from(userMedia)
-    .where(eq(userMedia.userId, userId));
+    .where(and(eq(userMedia.tmdbId, tmdbId), eq(userMedia.userId, userId)));
 
-  return media;
+  return media[0];
 }
 
 export async function getLikedCollection(userId: string) {
@@ -359,17 +358,18 @@ export async function getLikedCollection(userId: string) {
 }
 
 export async function isMediaLiked(userId: string, tmdbId: number) {
-  const media = await getUserMedia(userId);
-  
-  const currentMedia = media.filter((m) => m.tmdbId === tmdbId);
-  if (currentMedia.length === 0) {
+  const media = await getUserMedia(userId, tmdbId);
+
+  if (!media) {
     return false;
   }
 
   const likedCollection = await getLikedCollection(userId);
+
   if (!likedCollection) {
     return false;
   }
+
   const collectionId = likedCollection.id;
 
   const likedMedia = await db
@@ -378,7 +378,7 @@ export async function isMediaLiked(userId: string, tmdbId: number) {
     .where(
       and(
         eq(collectionMedia.collectionId, collectionId),
-        eq(collectionMedia.mediaId, currentMedia[0].id)
+        eq(collectionMedia.mediaId, media.id)
       )
     )
     .limit(1);

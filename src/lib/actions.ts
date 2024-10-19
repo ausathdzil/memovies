@@ -8,9 +8,10 @@ import {
   userMedia,
   users,
 } from '@/db/schema';
+import { getLikedCollection, getUserMedia } from '@/lib/data';
 import { createSession } from '@/lib/session';
 import bcrypt from 'bcrypt';
-import { and, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
@@ -165,16 +166,12 @@ export async function addMoviesToLiked(userId: string, formData: FormData) {
   const mediaType = formData.get('mediaType') as string;
   const posterPath = formData.get('posterPath') as string;
 
-  const existingCollection = await db
-    .select()
-    .from(collections)
-    .where(and(eq(collections.userId, userId), eq(collections.name, 'Liked')))
-    .limit(1);
+  const existingCollection = await getLikedCollection(userId);
 
   let collectionId: string;
 
-  if (existingCollection.length > 0) {
-    collectionId = existingCollection[0].id;
+  if (existingCollection) {
+    collectionId = existingCollection.id;
   } else {
     const newCollection = await db
       .insert(collections)
@@ -187,13 +184,9 @@ export async function addMoviesToLiked(userId: string, formData: FormData) {
     collectionId = newCollection[0].id;
   }
 
-  const exisitngMedia = await db
-    .select()
-    .from(userMedia)
-    .where(and(eq(userMedia.tmdbId, tmdbId), eq(userMedia.userId, userId)))
-    .limit(1);
+  const exisitngMedia = await getUserMedia(userId, tmdbId);
 
-  if (exisitngMedia.length > 0) {
+  if (exisitngMedia) {
     return;
   }
 
@@ -228,22 +221,16 @@ export async function removeMoviesFromLiked(
   userId: string,
   formData: FormData
 ) {
-  const movieId = Number(formData.get('tmdbId'));
+  const tmdbId = Number(formData.get('tmdbId'));
+  const media = await getUserMedia(userId, tmdbId);
 
-  const media = await db
-    .select()
-    .from(userMedia)
-    .where(and(eq(userMedia.tmdbId, movieId), eq(userMedia.userId, userId)));
-
-  if (!media[0]) {
+  if (!media) {
     return;
   }
 
-  await db.delete(movies).where(eq(movies.mediaId, media[0].id));
-  await db
-    .delete(collectionMedia)
-    .where(eq(collectionMedia.mediaId, media[0].id));
-  await db.delete(userMedia).where(eq(userMedia.id, media[0].id));
+  await db.delete(movies).where(eq(movies.mediaId, media.id));
+  await db.delete(collectionMedia).where(eq(collectionMedia.mediaId, media.id));
+  await db.delete(userMedia).where(eq(userMedia.id, media.id));
 
   revalidatePath(`/dashboard`);
 }

@@ -13,9 +13,9 @@ export default function SearchForm() {
   const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams);
     if (term) {
-      params.set('search', term);
+      params.set('query', term);
     } else {
-      params.delete('search');
+      params.delete('query');
     }
     replace(`${pathname}?${params.toString()}`);
   }, 300);

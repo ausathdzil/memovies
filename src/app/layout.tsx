@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import Header from '@/components/layout/header';
+import { verifySession } from '@/lib/session';
 
 const manrope = localFont({
   src: './fonts/Manrope-VariableFont_wght.ttf',
@@ -18,18 +19,20 @@ export const metadata: Metadata = {
 
 export const fetchCache = 'default-cache';
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await verifySession();
+
   return (
     <html lang="en">
       <head>
         <link rel="icon" href="/icon.svg" />
       </head>
       <body className={`${manrope.className} antialiased`}>
-        <Header />
+        <Header isAuth={session.isAuth} />
         {children}
         <FloatingDock />
         <Footer />
