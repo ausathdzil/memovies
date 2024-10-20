@@ -1,7 +1,7 @@
 import MoviesSection from '@/components/home/movies-section';
 import TVShowsSection from '@/components/home/tvshows-section';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Film } from 'lucide-react';
+import { Film } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Home() {

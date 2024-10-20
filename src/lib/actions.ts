@@ -8,10 +8,9 @@ import {
   userMedia,
   users,
 } from '@/db/schema';
-import { getLikedCollection, getUserMedia } from '@/lib/data';
 import { createSession } from '@/lib/session';
 import bcrypt from 'bcrypt';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
@@ -160,77 +159,80 @@ export async function login(prevState: LoginState, formData: FormData) {
   await createSession(user[0].id);
 }
 
-export async function addMoviesToLiked(userId: string, formData: FormData) {
-  const tmdbId = Number(formData.get('tmdbId'));
-  const title = formData.get('title') as string;
-  const mediaType = formData.get('mediaType') as string;
-  const posterPath = formData.get('posterPath') as string;
+export async function addMovieToLiked(userId: string, formData: FormData) {
+  const movieData = {
+    tmdbId: Number(formData.get('tmdbId')),
+    title: formData.get('title') as string,
+    mediaType: formData.get('mediaType') as string,
+    posterPath: formData.get('posterPath') as string,
+  };
 
-  const existingCollection = await getLikedCollection(userId);
+  const existingCollection = await db
+    .select()
+    .from(collections)
+    .where(and(eq(collections.userId, userId), eq(collections.name, 'Liked')))
+    .limit(1);
 
-  let collectionId: string;
-
-  if (existingCollection) {
-    collectionId = existingCollection.id;
-  } else {
-    const newCollection = await db
+  let likedCollection: { id: string };
+  if (existingCollection.length === 0) {
+    const [collection] = await db
       .insert(collections)
       .values({
-        name: 'Liked',
         userId,
+        name: 'Liked',
       })
-      .returning({ id: collections.id });
+      .returning({
+        id: collections.id,
+      });
 
-    collectionId = newCollection[0].id;
+    likedCollection = collection;
+  } else {
+    likedCollection = existingCollection[0];
   }
 
-  const exisitngMedia = await getUserMedia(userId, tmdbId);
-
-  if (exisitngMedia) {
-    return;
-  }
-
-  const media = await db
+  const [userMediaEntry] = await db
     .insert(userMedia)
     .values({
-      tmdbId,
-      title,
-      mediaType,
       userId,
+      tmdbId: movieData.tmdbId,
+      title: movieData.title,
+      mediaType: movieData.mediaType,
     })
-    .returning({ mediaId: userMedia.id });
-
-  const mediaId = media[0].mediaId;
+    .returning({
+      id: userMedia.id,
+    });
 
   await db.insert(movies).values({
-    tmdbId,
-    posterPath,
-    title,
-    mediaId,
+    tmdbId: movieData.tmdbId,
+    posterPath: movieData.posterPath,
+    title: movieData.title,
+    mediaId: userMediaEntry.id,
   });
 
   await db.insert(collectionMedia).values({
-    collectionId,
-    mediaId,
+    collectionId: likedCollection.id,
+    mediaId: userMediaEntry.id,
   });
 
   revalidatePath(`/dashboard`);
 }
 
-export async function removeMoviesFromLiked(
-  userId: string,
-  formData: FormData
-) {
+export async function removeMovieFromLiked(userId: string, formData: FormData) {
   const tmdbId = Number(formData.get('tmdbId'));
-  const media = await getUserMedia(userId, tmdbId);
+  const media = await db
+    .select()
+    .from(userMedia)
+    .where(and(eq(userMedia.userId, userId), eq(userMedia.tmdbId, tmdbId)))
+    .limit(1);
 
-  if (!media) {
+  if (media.length === 0) {
     return;
   }
 
-  await db.delete(movies).where(eq(movies.mediaId, media.id));
-  await db.delete(collectionMedia).where(eq(collectionMedia.mediaId, media.id));
-  await db.delete(userMedia).where(eq(userMedia.id, media.id));
+  const mediaId = media[0].id;
+  await db.delete(collectionMedia).where(eq(collectionMedia.mediaId, mediaId));
+  await db.delete(movies).where(eq(movies.mediaId, mediaId));
+  await db.delete(userMedia).where(eq(userMedia.id, mediaId));
 
   revalidatePath(`/dashboard`);
 }

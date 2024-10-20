@@ -1,15 +1,11 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { addMoviesToLiked, removeMoviesFromLiked } from '@/lib/actions';
+import { addMovieToLiked, removeMovieFromLiked } from '@/lib/actions';
 import { Movie } from '@/lib/definitions';
 import clsx from 'clsx';
 import { Heart, Loader2 } from 'lucide-react';
 import { useState, useTransition } from 'react';
-
-type Liked = {
-  liked: boolean;
-};
 
 export default function LikeButton({
   movie,
@@ -22,15 +18,15 @@ export default function LikeButton({
 }) {
   const [liked, setLiked] = useState(initialLiked);
   const [pending, startTransition] = useTransition();
-  const removeMoviesFromLikedWithId = removeMoviesFromLiked.bind(null, userId);
-  const addMoviesToLikedWithId = addMoviesToLiked.bind(null, userId);
+  const removeMovieFromLikedWithId = removeMovieFromLiked.bind(null, userId);
+  const addMovieToLikedWithId = addMovieToLiked.bind(null, userId);
 
   const handleAction = async (formData: FormData) => {
     startTransition(async () => {
       if (liked) {
-        await removeMoviesFromLikedWithId(formData);
+        await removeMovieFromLikedWithId(formData);
       } else {
-        await addMoviesToLikedWithId(formData);
+        await addMovieToLikedWithId(formData);
       }
       setLiked(!liked);
     });

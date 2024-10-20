@@ -15,7 +15,7 @@ import {
   TVShowList,
 } from '@/lib/definitions';
 import { verifySession } from '@/lib/session';
-import { and, eq, inArray } from 'drizzle-orm';
+import { and, eq, inArray, sql } from 'drizzle-orm';
 import { cache } from 'react';
 
 export const getUser = cache(async () => {
@@ -338,76 +338,57 @@ export async function getSearchMovies(
   }
 }
 
-export async function getUserMedia(userId: string, tmdbId: number) {
-  const media = await db
-    .select()
+export async function getUserMediaWithLikeStatus(
+  userId: string,
+  tmdbId: number
+) {
+  const result = await db
+    .select({
+      media: userMedia,
+      isLiked: sql<boolean>`CASE WHEN collection_media.id IS NOT NULL THEN true ELSE false END`,
+    })
     .from(userMedia)
-    .where(and(eq(userMedia.tmdbId, tmdbId), eq(userMedia.userId, userId)));
-
-  return media[0];
-}
-
-export async function getLikedCollection(userId: string) {
-  const collection = await db
-    .select()
-    .from(collections)
-    .where(and(eq(collections.userId, userId), eq(collections.name, 'Liked')))
+    .leftJoin(
+      collections,
+      and(
+        eq(collections.userId, userMedia.userId),
+        eq(collections.name, 'Liked')
+      )
+    )
+    .leftJoin(
+      collectionMedia,
+      and(
+        eq(collectionMedia.mediaId, userMedia.id),
+        eq(collectionMedia.collectionId, collections.id)
+      )
+    )
+    .where(and(eq(userMedia.userId, userId), eq(userMedia.tmdbId, tmdbId)))
     .limit(1);
 
-  return collection[0];
+  return result[0];
 }
 
 export async function isMediaLiked(userId: string, tmdbId: number) {
-  const media = await getUserMedia(userId, tmdbId);
-
-  if (!media) {
-    return false;
-  }
-
-  const likedCollection = await getLikedCollection(userId);
-
-  if (!likedCollection) {
-    return false;
-  }
-
-  const collectionId = likedCollection.id;
-
-  const likedMedia = await db
-    .select()
-    .from(collectionMedia)
-    .where(
-      and(
-        eq(collectionMedia.collectionId, collectionId),
-        eq(collectionMedia.mediaId, media.id)
-      )
-    )
-    .limit(1);
-
-  return likedMedia.length > 0;
+  const result = await getUserMediaWithLikeStatus(userId, tmdbId);
+  return result ? result.isLiked : false;
 }
 
 export async function getLikedMovies(userId: string) {
-  const likedCollection = await getLikedCollection(userId);
-  if (!likedCollection) {
-    return [];
-  }
-  const collectionId = likedCollection.id;
-
-  const likedMedia = await db
-    .select({
-      mediaId: collectionMedia.mediaId,
-    })
-    .from(collectionMedia)
-    .where(eq(collectionMedia.collectionId, collectionId));
-  if (likedMedia.length === 0) {
-    return [];
-  }
-  const mediaIdList = likedMedia.map((m) => m.mediaId);
-
   const likedMovies = await db
-    .select()
+    .select({
+      movie: movies,
+    })
     .from(movies)
-    .where(inArray(movies.mediaId, mediaIdList));
+    .innerJoin(userMedia, eq(userMedia.id, movies.mediaId))
+    .innerJoin(collectionMedia, eq(collectionMedia.mediaId, userMedia.id))
+    .innerJoin(
+      collections,
+      and(
+        eq(collections.id, collectionMedia.collectionId),
+        eq(collections.userId, userId),
+        eq(collections.name, 'Liked')
+      )
+    );
 
-  return likedMovies;
+  return likedMovies.map(({ movie }) => movie);
 }
