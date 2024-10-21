@@ -13,7 +13,7 @@ export default async function Page(props: {
   }
 
   return (
-    <main className="min-h-[calc(100vh-168px)] flex flex-col justify-center mx-auto">
+    <main className="min-h-[calc(100vh-168px)] flex flex-col items-center justify-center p-6 mx-auto">
       <div className="relative max-w-4xl mx-auto min-h-[450px] overflow-hidden rounded-lg border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)]">
         <Image
           className="object-cover object-top"
