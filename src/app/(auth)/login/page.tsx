@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 export default function Page() {
   return (
-    <Card className="w-fit border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)] rounded-xl">
+    <Card className="w-fit border-2 border-zinc-950 shadow-[10px_10px_0_0_rgba(0,0,0,1)] rounded-xl">
       <CardHeader className="p-8">
         <CardTitle className="font-bold text-4xl">Login</CardTitle>
         <CardDescription className="text-lg">Welcome Back!</CardDescription>

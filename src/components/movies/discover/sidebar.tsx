@@ -34,8 +34,8 @@ export default function DiscoverSidebar() {
   };
 
   return (
-    <ScrollArea className="max-w-[20%] hidden lg:block border-y-2 border-l-2 border-black rounded-s-xl">
-      <nav className="p-6 border-b border-black space-y-4">
+    <ScrollArea className="max-w-[20%] hidden lg:block border-y-2 border-l-2 border-zinc-950 rounded-s-xl">
+      <nav className="p-6 border-b border-zinc-950 space-y-4">
         {[
           {
             icon: Calendar,
@@ -79,7 +79,7 @@ export default function DiscoverSidebar() {
           },
         ].map((item) => (
           <Button
-            className={`w-full justify-start border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] ${item.color} text-white hover:bg-black hover:text-white`}
+            className={`w-full justify-start border-2 border-zinc-950 shadow-[4px_4px_0_0_rgba(0,0,0,1)] ${item.color} text-white hover:bg-zinc-950 hover:text-white`}
             variant="outline"
             onClick={() => handleClick(item.params)}
             key={item.label}

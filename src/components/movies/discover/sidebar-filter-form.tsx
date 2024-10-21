@@ -67,16 +67,16 @@ export default function SidebarFilterForm() {
 
   return (
     <form onSubmit={handleSubmit} ref={formRef}>
-      <div className="p-6 border-b border-black space-y-2">
+      <div className="p-6 border-b border-zinc-950 space-y-2">
         <Label htmlFor="sort_by">Sort By</Label>
         <Select
           defaultValue={searchParams.get('sort_by') || 'popularity.desc'}
           name="sort_by"
         >
-          <SelectTrigger className="border-black">
+          <SelectTrigger className="border-zinc-950">
             <SelectValue placeholder="Select option" />
           </SelectTrigger>
-          <SelectContent className="border-black">
+          <SelectContent className="border-zinc-950">
             <SelectGroup>
               <SelectLabel>Popularity</SelectLabel>
               <SelectItem value="popularity.asc">
@@ -111,7 +111,7 @@ export default function SidebarFilterForm() {
         </Select>
       </div>
       {genres && (
-        <div className="p-6 border-b border-black space-y-2">
+        <div className="p-6 border-b border-zinc-950 space-y-2">
           <Label htmlFor="genre">Genres</Label>
           <div className="grid grid-cols-2 gap-y-2 gap-x-4">
             {genres.map((genre) => (
@@ -131,12 +131,12 @@ export default function SidebarFilterForm() {
           </div>
         </div>
       )}
-      <div className="p-6 border-b border-black space-y-2">
+      <div className="p-6 border-b border-zinc-950 space-y-2">
         <p className="text-sm font-medium leading-none">Release Year</p>
         <div>
           <Label htmlFor="from">From</Label>
           <Input
-            className="border-black"
+            className="border-zinc-950"
             type="number"
             id="from"
             name="from"
@@ -146,7 +146,7 @@ export default function SidebarFilterForm() {
         <div>
           <Label htmlFor="to">To</Label>
           <Input
-            className="border-black"
+            className="border-zinc-950"
             type="number"
             id="to"
             name="to"
@@ -156,7 +156,7 @@ export default function SidebarFilterForm() {
       </div>
       <div className="p-6 flex flex-col gap-4">
         <Button
-          className="w-full border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-teal-500 text-white hover:bg-black hover:text-white"
+          className="w-full border-2 border-zinc-950 shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-teal-500 text-white hover:bg-zinc-950 hover:text-white"
           type="submit"
         >
           <Filter className="mr-2" size={16} />
@@ -164,7 +164,7 @@ export default function SidebarFilterForm() {
         </Button>
         <Link href="/movies/discover">
           <Button
-            className="w-full border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+            className="w-full border-2 border-zinc-950 shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
             variant="destructive"
           >
             <History className="mr-2" size={16} />

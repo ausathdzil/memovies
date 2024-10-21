@@ -31,7 +31,7 @@ export default function TVShowCarousel({ tvShows }: { tvShows: TVShowList[] }) {
               >
                 <div className="relative w-[180px] sm:w-[256px] h-[270px] sm:h-[384px]">
                   <Image
-                    className="border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)] rounded-xl"
+                    className="border-2 border-zinc-950 shadow-[10px_10px_0_0_rgba(0,0,0,1)] rounded-xl"
                     src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
                     alt={tvShow.name}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

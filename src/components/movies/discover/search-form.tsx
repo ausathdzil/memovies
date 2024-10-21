@@ -42,7 +42,7 @@ export default function SearchForm() {
         <Input
           id="search"
           name="search"
-          className="peer pl-9 border-2 border-black shadow-none"
+          className="peer pl-9 border-2 border-zinc-950 shadow-none"
           placeholder="Search a movie..."
           type="search"
           defaultValue={searchParams.get('search') as string}

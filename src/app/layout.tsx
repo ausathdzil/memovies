@@ -4,8 +4,6 @@ import Header from '@/components/layout/header';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import { getUser } from '@/lib/data';
-import { UserProvider } from '@/components/auth/user-provider';
 
 const manrope = localFont({
   src: './fonts/Manrope-VariableFont_wght.ttf',

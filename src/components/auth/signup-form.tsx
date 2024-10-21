@@ -110,7 +110,7 @@ export default function SignUpForm() {
         )}
       </div>
       <Button
-        className="w-full bg-background text-primary hover:bg-teal-400 border-2 border-black"
+        className="w-full bg-background text-primary hover:bg-teal-500 border-2 border-zinc-950"
         disabled={pending}
         type="submit"
       >

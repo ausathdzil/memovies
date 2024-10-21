@@ -8,7 +8,6 @@ import {
 } from '@/db/schema';
 import {
   Movie,
-  MovieGenre,
   MovieList,
   SearchParams,
   TVShow,
@@ -372,4 +371,13 @@ export async function getLikedMovies(userId: string) {
     );
 
   return likedMovies.map(({ movie }) => movie);
+}
+
+export async function getCollections(userId: string) {
+  const userCollections = await db
+    .select()
+    .from(collections)
+    .where(eq(collections.userId, userId));
+
+  return userCollections;
 }

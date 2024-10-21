@@ -18,7 +18,7 @@ export default function FloatingDock() {
   return (
     <div
       className={clsx(
-        `fixed left-1/2 bottom-10 transform -translate-x-1/2 bg-primary-foreground/70 backdrop-filter backdrop-blur-lg rounded-full px-5 py-3 border-2 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]`,
+        `fixed left-1/2 bottom-10 transform -translate-x-1/2 bg-primary-foreground/70 backdrop-filter backdrop-blur-lg rounded-full px-5 py-3 border-2 border-zinc-950 shadow-[6px_6px_0_0_rgba(0,0,0,1)]`,
         pathname.startsWith('/movies/discover') && 'hidden'
       )}
     >

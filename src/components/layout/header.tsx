@@ -25,9 +25,9 @@ export default function Header() {
         isScrolled && 'bg-background/80 backdrop-blur-md'
       )}
     >
-      <nav className="flex items-stretch border-b-2 border-black">
+      <nav className="flex items-stretch border-b-2 border-zinc-950">
         <Link
-          className="font-bold p-4 sm:p-6 border-r-2 border-black flex items-center space-x-2 hover:bg-zinc-100 transition ease-in-out"
+          className="font-bold p-4 sm:p-6 border-r-2 border-zinc-950 flex items-center space-x-2 hover:bg-zinc-100 transition ease-in-out"
           href="/"
         >
           <Film size={24} />
@@ -35,13 +35,13 @@ export default function Header() {
         </Link>
         <div className="hidden md:flex">
           <Link
-            className="p-6 border-r-2 border-black hover:bg-zinc-100 transition ease-in-out"
+            className="p-6 border-r-2 border-zinc-950 hover:bg-zinc-100 transition ease-in-out"
             href="/movies"
           >
             Movies
           </Link>
           <Link
-            className="p-6 border-black border-r-2 hover:bg-zinc-100 transition ease-in-out"
+            className="p-6 border-zinc-950 border-r-2 hover:bg-zinc-100 transition ease-in-out"
             href="/tv-shows"
           >
             TV Shows
@@ -49,10 +49,10 @@ export default function Header() {
         </div>
         <div className="flex grow justify-end items-center">
           <Link
-            className="h-full sm:border-l-2 border-black flex items-center px-4 sm:px-6"
+            className="h-full sm:border-l-2 border-zinc-950 flex items-center px-4 sm:px-6"
             href="/login"
           >
-            <Button className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-zinc-50 text-black hover:bg-teal-400">
+            <Button className="border-2 border-zinc-950 shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-zinc-50 text-black hover:bg-teal-500">
               Get Started
             </Button>
           </Link>

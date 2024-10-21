@@ -13,11 +13,14 @@ export default async function TVShowsSection() {
       {tvShows && (
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-8">
           {filteredTVShows.map((tvShow) => (
-            <li className="flex flex-col items-center text-center space-y-4" key={tvShow.id}>
+            <li
+              className="flex flex-col items-center text-center space-y-4"
+              key={tvShow.id}
+            >
               <Link href={`/tv-shows/${tvShow.id}`}>
                 <div className="relative w-[256px] h-[384px]">
                   <Image
-                    className="border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)] rounded-xl"
+                    className="border-2 border-zinc-950 shadow-[10px_10px_0_0_rgba(0,0,0,1)] rounded-xl"
                     src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
                     alt={tvShow.name}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

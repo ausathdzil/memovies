@@ -39,7 +39,7 @@ export default function LikeButton({
       <input type="hidden" name="mediaType" value="movie" />
       <input type="hidden" name="posterPath" value={movie.poster_path} />
       <Button
-        className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+        className="border-2 border-zinc-950 shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
         variant="secondary"
         type="submit"
         disabled={pending}

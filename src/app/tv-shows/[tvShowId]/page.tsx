@@ -14,7 +14,7 @@ export default async function Page(props: {
 
   return (
     <main className="min-h-[calc(100vh-168px)] flex flex-col items-center justify-center p-6 mx-auto">
-      <div className="relative max-w-4xl mx-auto min-h-[450px] overflow-hidden rounded-lg border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)]">
+      <div className="relative max-w-4xl mx-auto min-h-[450px] overflow-hidden rounded-lg border-2 border-zinc-950 shadow-[10px_10px_0_0_rgba(0,0,0,1)]">
         <Image
           className="object-cover object-top"
           src={`https://image.tmdb.org/t/p/w1280${tvShow.backdrop_path}`}
@@ -25,7 +25,7 @@ export default async function Page(props: {
         />
         <div className="absolute inset-0 bg-primary/85 backdrop-filter rounded-lg" />
         <div className="relative flex flex-col lg:flex-row items-center lg:items-start gap-8 p-8">
-          <div className="relative w-[180px] sm:w-[256px] h-[270px] sm:h-[384px] flex-shrink-0 overflow-hidden rounded-lg border-2 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
+          <div className="relative w-[180px] sm:w-[256px] h-[270px] sm:h-[384px] flex-shrink-0 overflow-hidden rounded-lg border-2 border-zinc-950 shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
             <Image
               src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
               alt={tvShow.name}
