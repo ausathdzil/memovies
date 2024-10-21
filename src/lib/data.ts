@@ -15,7 +15,7 @@ import {
   TVShowList,
 } from '@/lib/definitions';
 import { verifySession } from '@/lib/session';
-import { and, eq, inArray, sql } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { cache } from 'react';
 
 export const getUser = cache(async () => {

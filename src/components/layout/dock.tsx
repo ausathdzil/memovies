@@ -22,36 +22,37 @@ export default function FloatingDock() {
         pathname.startsWith('/movies/discover') && 'hidden'
       )}
     >
-      <nav>
-        <ul className="flex space-x-4">
-          <TooltipProvider>
-            {[
-              { name: 'Home', href: '/', icon: Home },
-              { name: 'Movies', href: '/movies', icon: Film },
-              { name: 'TV Shows', href: '/tv-shows', icon: Tv },
-              { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-              { name: 'Profile', href: '/profile', icon: User },
-            ].map((link) => (
-              <li key={link.name}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link href={link.href}>
-                      <Button
-                        className="p-2 rounded-full hover:bg-zinc-50"
-                        variant="ghost"
-                        size="icon"
-                        aria-label={link.name}
-                      >
-                        <link.icon className="hover:scale-105 transition-transform" size={16} />
-                      </Button>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">{link.name}</TooltipContent>
-                </Tooltip>
-              </li>
-            ))}
-          </TooltipProvider>
-        </ul>
+      <nav className="flex space-x-4">
+        <TooltipProvider>
+          {[
+            { name: 'Home', href: '/', icon: Home },
+            { name: 'Movies', href: '/movies', icon: Film },
+            { name: 'TV Shows', href: '/tv-shows', icon: Tv },
+            { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+            { name: 'Profile', href: '/profile', icon: User },
+          ].map((link) => (
+            <div key={link.name}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link href={link.href}>
+                    <Button
+                      className="p-2 rounded-full hover:bg-zinc-50"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={link.name}
+                    >
+                      <link.icon
+                        className="hover:scale-105 transition-transform"
+                        size={16}
+                      />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>{link.name}</TooltipContent>
+              </Tooltip>
+            </div>
+          ))}
+        </TooltipProvider>
       </nav>
     </div>
   );
