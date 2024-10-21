@@ -1,10 +1,11 @@
 import FloatingDock from '@/components/layout/dock';
 import Footer from '@/components/layout/footer';
+import Header from '@/components/layout/header';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import Header from '@/components/layout/header';
-import { verifySession } from '@/lib/session';
+import { getUser } from '@/lib/data';
+import { UserProvider } from '@/components/auth/user-provider';
 
 const manrope = localFont({
   src: './fonts/Manrope-VariableFont_wght.ttf',
@@ -17,20 +18,18 @@ export const metadata: Metadata = {
   description: 'Save your precious memories.',
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await verifySession();
-
   return (
     <html lang="en">
       <head>
         <link rel="icon" href="/icon.svg" />
       </head>
       <body className={`${manrope.className} antialiased`}>
-        <Header isAuth={session.isAuth} />
+        <Header />
         {children}
         <FloatingDock />
         <Footer />

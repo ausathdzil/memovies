@@ -34,7 +34,7 @@ export default function SearchForm() {
   }, 300);
 
   return (
-    <div className="p-6">
+    <div className="w-full p-6">
       <label className="sr-only" htmlFor="search">
         Search
       </label>

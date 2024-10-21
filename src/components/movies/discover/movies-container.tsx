@@ -5,10 +5,8 @@ import { Frown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default async function MoviesContainer({
-  props,
-}: {
-  props: { searchParams: Promise<SearchParams> };
+export default async function MoviesContainer(props: {
+  searchParams: Promise<SearchParams>;
 }) {
   const searchParams = await props.searchParams;
   const query = searchParams.query || '';
@@ -32,7 +30,7 @@ export default async function MoviesContainer({
   }
 
   return (
-    <ScrollArea>
+    <ScrollArea className="w-full">
       <div className="px-6 pb-6 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6 border-black rounded-xl">
         {movies.map((movie) => (
           <Link

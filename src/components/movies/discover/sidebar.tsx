@@ -6,6 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import useTime from '@/lib/hooks';
 import { Calendar, Clock, Star, Trophy } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
+import { Suspense } from 'react';
 
 export default function DiscoverSidebar() {
   const pathname = usePathname();
@@ -88,7 +89,9 @@ export default function DiscoverSidebar() {
           </Button>
         ))}
       </nav>
-      <SidebarFilterForm />
+      <Suspense>
+        <SidebarFilterForm />
+      </Suspense>
     </ScrollArea>
   );
 }

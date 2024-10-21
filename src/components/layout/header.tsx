@@ -4,11 +4,9 @@ import { Button } from '@/components/ui/button';
 import clsx from 'clsx';
 import { Film } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export default function Header({ isAuth }: { isAuth: boolean }) {
-  const pathname = usePathname();
+export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -50,25 +48,14 @@ export default function Header({ isAuth }: { isAuth: boolean }) {
           </Link>
         </div>
         <div className="flex grow justify-end items-center">
-          {isAuth ? (
-            <Link
-              className="h-full sm:border-l-2 border-black flex items-center px-4 sm:px-6"
-              href="/dashboard"
-            >
-              <Button className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-zinc-50 text-black hover:bg-teal-400">
-                Dashboard
-              </Button>
-            </Link>
-          ) : (
-            <Link
-              className="h-full sm:border-l-2 border-black flex items-center px-4 sm:px-6"
-              href="/login"
-            >
-              <Button className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-zinc-50 text-black hover:bg-teal-400">
-                Get Started
-              </Button>
-            </Link>
-          )}
+          <Link
+            className="h-full sm:border-l-2 border-black flex items-center px-4 sm:px-6"
+            href="/login"
+          >
+            <Button className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-zinc-50 text-black hover:bg-teal-400">
+              Get Started
+            </Button>
+          </Link>
         </div>
       </nav>
     </header>
