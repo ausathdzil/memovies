@@ -23,9 +23,7 @@ export default function Header({ isAuth }: { isAuth: boolean }) {
   return (
     <header
       className={clsx(
-        pathname === '/movies/discover'
-          ? 'hidden'
-          : 'sticky top-0 z-50 shadow-sm',
+        'sticky top-0 z-50 shadow-sm',
         isScrolled && 'bg-background/80 backdrop-blur-md'
       )}
     >

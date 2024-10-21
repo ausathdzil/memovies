@@ -1,60 +1,24 @@
-import { getDiscoverMovies, getSearchMovies } from '@/lib/data';
+import MoviesContainer from '@/components/movies/discover/movies-container';
+import SearchForm from '@/components/movies/discover/search-form';
+import DiscoverSidebar from '@/components/movies/discover/sidebar';
 import { SearchParams } from '@/lib/definitions';
-import { Frown } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
+import { Suspense } from 'react';
 
-export default async function Page(props: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const searchParams = await props.searchParams;
-  const query = searchParams.query || '';
+export const experimental_ppr = true;
 
-  let movies;
-  if (query) {
-    const searchData = await getSearchMovies(query);
-    movies = searchData?.results;
-  } else {
-    const discoverData = await getDiscoverMovies(searchParams);
-    movies = discoverData?.results;
-  }
-
-  if (!movies || movies.length === 0) {
-    return (
-      <div className="w-full h-full flex flex-col justify-center items-center gap-2">
-        <Frown size={64} />
-        <h1 className="text-5xl font-bold">No movies found</h1>
-      </div>
-    );
-  }
-
+export default function Page(props: { searchParams: Promise<SearchParams> }) {
   return (
-    <ul className="px-6 pb-6 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
-      {movies.map((movie) => (
-        <li
-          className="w-full h-full text-center space-y-6 border border-black p-8"
-          key={movie.id}
-        >
-          <Link
-            className="flex flex-col items-center gap-8"
-            href={`/movies/${movie.id}`}
-          >
-            <div className="relative w-[128px] h-[192px]">
-              <Image
-                className="border-2 border-black shadow-[10px_10px_0_0_rgba(0,0,0,1)] rounded-xl"
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                alt={movie.title}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                priority
-                fill
-              />
-            </div>
-            <article>
-              <p className="text-sm text-wrap font-semibold">{movie.title}</p>
-            </article>
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <main className="flex p-8 max-h-[calc(100vh-64px)]">
+      <DiscoverSidebar />
+      <div className="min-w-[80%] flex flex-col border-2 border-black rounded-e-xl">
+        <Suspense>
+          <SearchForm />
+        </Suspense>
+        <Suspense fallback={<Loader2 className="animate-spin" />}>
+          <MoviesContainer props={props} />
+        </Suspense>
+      </div>
+    </main>
   );
 }

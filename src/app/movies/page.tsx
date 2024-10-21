@@ -1,9 +1,11 @@
 import MoviesSection from '@/components/movies/movies-sections';
 import MoviesSectionSkeleton from '@/components/skeletons/movies-section-skeleton';
 import { Button } from '@/components/ui/button';
-import { Film, Loader2 } from 'lucide-react';
+import { Film } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
+
+export const experimental_ppr = true;
 
 export default function Page() {
   return (

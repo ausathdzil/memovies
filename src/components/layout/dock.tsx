@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import clsx from 'clsx';
-import { Film, Home, LayoutDashboard, Tv, User } from 'lucide-react';
+import { Home, LayoutDashboard, Search, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -26,8 +26,7 @@ export default function FloatingDock() {
         <TooltipProvider>
           {[
             { name: 'Home', href: '/', icon: Home },
-            { name: 'Movies', href: '/movies', icon: Film },
-            { name: 'TV Shows', href: '/tv-shows', icon: Tv },
+            { name: 'Discover Movies', href: '/movies/discover', icon: Search },
             { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
             { name: 'Profile', href: '/profile', icon: User },
           ].map((link) => (

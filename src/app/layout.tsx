@@ -17,8 +17,6 @@ export const metadata: Metadata = {
   description: 'Save your precious memories.',
 };
 
-export const experimental_ppr = true;
-
 export default async function RootLayout({
   children,
 }: Readonly<{
