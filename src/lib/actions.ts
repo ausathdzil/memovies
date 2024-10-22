@@ -214,7 +214,8 @@ export async function addMovieToLiked(userId: string, formData: FormData) {
     mediaId: userMediaEntry.id,
   });
 
-  revalidatePath(`/dashboard`);
+  revalidatePath(`/movies/${movieData.tmdbId}`);
+  revalidatePath('/dashboard');
 }
 
 export async function removeMovieFromLiked(userId: string, formData: FormData) {
@@ -234,5 +235,6 @@ export async function removeMovieFromLiked(userId: string, formData: FormData) {
   await db.delete(movies).where(eq(movies.mediaId, mediaId));
   await db.delete(userMedia).where(eq(userMedia.id, mediaId));
 
-  revalidatePath(`/dashboard`);
+  revalidatePath(`/movies/${tmdbId}`);
+  revalidatePath('/dashboard');
 }

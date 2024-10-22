@@ -15,6 +15,7 @@ import {
 } from '@/lib/definitions';
 import { verifySession } from '@/lib/session';
 import { and, eq, sql } from 'drizzle-orm';
+import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 
 export const getUser = cache(async () => {
@@ -318,40 +319,41 @@ export async function getSearchMovies(
   }
 }
 
-export async function getUserMediaWithLikeStatus(
-  userId: string,
-  tmdbId: number
-) {
-  const result = await db
-    .select({
-      media: userMedia,
-      isLiked: sql<boolean>`CASE WHEN collection_media.id IS NOT NULL THEN true ELSE false END`,
-    })
-    .from(userMedia)
-    .leftJoin(
-      collections,
-      and(
-        eq(collections.userId, userMedia.userId),
-        eq(collections.name, 'Liked')
+export const getUserMediaWithLikeStatus = unstable_cache(
+  async (userId: string, tmdbId: number) => {
+    const result = await db
+      .select({
+        media: userMedia,
+        isLiked: sql<boolean>`CASE WHEN collection_media.id IS NOT NULL THEN true ELSE false END`,
+      })
+      .from(userMedia)
+      .leftJoin(
+        collections,
+        and(
+          eq(collections.userId, userMedia.userId),
+          eq(collections.name, 'Liked')
+        )
       )
-    )
-    .leftJoin(
-      collectionMedia,
-      and(
-        eq(collectionMedia.mediaId, userMedia.id),
-        eq(collectionMedia.collectionId, collections.id)
+      .leftJoin(
+        collectionMedia,
+        and(
+          eq(collectionMedia.mediaId, userMedia.id),
+          eq(collectionMedia.collectionId, collections.id)
+        )
       )
-    )
-    .where(and(eq(userMedia.userId, userId), eq(userMedia.tmdbId, tmdbId)))
-    .limit(1);
+      .where(and(eq(userMedia.userId, userId), eq(userMedia.tmdbId, tmdbId)))
+      .limit(1);
 
-  return result[0];
-}
+    return result[0];
+  }
+);
 
-export async function isMediaLiked(userId: string, tmdbId: number) {
-  const result = await getUserMediaWithLikeStatus(userId, tmdbId);
-  return result ? result.isLiked : false;
-}
+export const isMediaLiked = unstable_cache(
+  async (userId: string, tmdbId: number) => {
+    const result = await getUserMediaWithLikeStatus(userId, tmdbId);
+    return result ? result.isLiked : false;
+  }
+);
 
 export async function getLikedMovies(userId: string) {
   const likedMovies = await db

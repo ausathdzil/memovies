@@ -45,7 +45,7 @@ export default function SearchForm() {
           className="peer pl-9 border-2 border-zinc-950 shadow-none"
           placeholder="Search a movie..."
           type="search"
-          defaultValue={searchParams.get('search') as string}
+          defaultValue={searchParams.get('query') as string}
           onChange={(e) => {
             setInputValue(e.target.value);
             handleSearch(e.target.value);
