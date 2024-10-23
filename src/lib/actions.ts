@@ -11,7 +11,7 @@ import {
 import { createSession } from '@/lib/session';
 import bcrypt from 'bcrypt';
 import { and, eq } from 'drizzle-orm';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
@@ -214,7 +214,7 @@ export async function addMovieToLiked(userId: string, formData: FormData) {
     mediaId: userMediaEntry.id,
   });
 
-  revalidatePath(`/movies/${movieData.tmdbId}`);
+  revalidateTag(`user-${userId}-media-${movieData.tmdbId}`);
   revalidatePath('/dashboard');
 }
 
@@ -235,6 +235,6 @@ export async function removeMovieFromLiked(userId: string, formData: FormData) {
   await db.delete(movies).where(eq(movies.mediaId, mediaId));
   await db.delete(userMedia).where(eq(userMedia.id, mediaId));
 
-  revalidatePath(`/movies/${tmdbId}`);
+  revalidateTag(`user-${userId}-media-${tmdbId}`);
   revalidatePath('/dashboard');
 }

@@ -10,7 +10,9 @@ export default async function MovieDetails(props: {
   params: Promise<{ movieId: number }>;
 }) {
   const session = await verifySession();
-  const movie = await getMovie((await props.params).movieId);
+  const params = await props.params;
+  
+  const movie = await getMovie(params.movieId);
   if (movie?.success === false || !movie) {
     notFound();
   }

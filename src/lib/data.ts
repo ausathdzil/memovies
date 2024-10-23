@@ -44,6 +44,10 @@ export async function getMovie(movieId: number): Promise<Movie | null> {
           accept: 'application/json',
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
         },
+        cache: 'force-cache',
+        next: {
+          revalidate: 3600,
+        },
       }
     );
     const data = await res.json();
@@ -65,6 +69,10 @@ export async function getTVShow(tvShowId: number): Promise<TVShow | null> {
           accept: 'application/json',
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
         },
+        cache: 'force-cache',
+        next: {
+          revalidate: 3600,
+        },
       }
     );
     const data = await res.json();
@@ -85,6 +93,10 @@ export async function getNowPlayingMovies(): Promise<MovieList[] | null> {
         accept: 'application/json',
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
       },
+      cache: 'force-cache',
+      next: {
+        revalidate: 3600,
+      },
     });
     const data = await res.json();
     return data.results;
@@ -103,6 +115,10 @@ export async function getPopularMovies(): Promise<MovieList[] | null> {
       headers: {
         accept: 'application/json',
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+      },
+      cache: 'force-cache',
+      next: {
+        revalidate: 3600,
       },
     });
     const data = await res.json();
@@ -123,6 +139,10 @@ export async function getTopRatedMovies(): Promise<MovieList[] | null> {
         accept: 'application/json',
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
       },
+      cache: 'force-cache',
+      next: {
+        revalidate: 3600,
+      },
     });
     const data = await res.json();
     return data.results;
@@ -141,6 +161,10 @@ export async function getUpcomingMovies(): Promise<MovieList[] | null> {
       headers: {
         accept: 'application/json',
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+      },
+      cache: 'force-cache',
+      next: {
+        revalidate: 3600,
       },
     });
     const data = await res.json();
@@ -162,6 +186,10 @@ export async function getAiringToday(): Promise<TVShowList[] | null> {
         headers: {
           accept: 'application/json',
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+        },
+        cache: 'force-cache',
+        next: {
+          revalidate: 3600,
         },
       }
     );
@@ -185,6 +213,10 @@ export async function getOnTheAir(): Promise<TVShowList[] | null> {
           accept: 'application/json',
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
         },
+        cache: 'force-cache',
+        next: {
+          revalidate: 3600,
+        },
       }
     );
     const data = await res.json();
@@ -207,6 +239,10 @@ export async function getPopularTVShows(): Promise<TVShowList[] | null> {
           accept: 'application/json',
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
         },
+        cache: 'force-cache',
+        next: {
+          revalidate: 3600,
+        },
       }
     );
     const data = await res.json();
@@ -228,6 +264,10 @@ export async function getTopRatedTVShows(): Promise<TVShowList[] | null> {
         headers: {
           accept: 'application/json',
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+        },
+        cache: 'force-cache',
+        next: {
+          revalidate: 3600,
         },
       }
     );
@@ -279,6 +319,10 @@ export async function getDiscoverMovies(
           accept: 'application/json',
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
         },
+        cache: 'force-cache',
+        next: {
+          revalidate: 3600,
+        },
       }
     );
     const data = await res.json();
@@ -307,6 +351,10 @@ export async function getSearchMovies(
           accept: 'application/json',
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
         },
+        cache: 'force-cache',
+        next: {
+          revalidate: 3600,
+        },
       }
     );
     const data = await res.json();
@@ -319,67 +367,83 @@ export async function getSearchMovies(
   }
 }
 
-export const getUserMediaWithLikeStatus = unstable_cache(
-  async (userId: string, tmdbId: number) => {
-    const result = await db
-      .select({
-        media: userMedia,
-        isLiked: sql<boolean>`CASE WHEN collection_media.id IS NOT NULL THEN true ELSE false END`,
-      })
-      .from(userMedia)
-      .leftJoin(
-        collections,
-        and(
-          eq(collections.userId, userMedia.userId),
-          eq(collections.name, 'Liked')
+export const getUserMediaWithLikeStatus = (userId: string, tmdbId: number) =>
+  unstable_cache(
+    async () => {
+      const result = await db
+        .select({
+          media: userMedia,
+          isLiked: sql<boolean>`CASE WHEN collection_media.id IS NOT NULL THEN true ELSE false END`,
+        })
+        .from(userMedia)
+        .leftJoin(
+          collections,
+          and(
+            eq(collections.userId, userMedia.userId),
+            eq(collections.name, 'Liked')
+          )
         )
-      )
-      .leftJoin(
-        collectionMedia,
-        and(
-          eq(collectionMedia.mediaId, userMedia.id),
-          eq(collectionMedia.collectionId, collections.id)
+        .leftJoin(
+          collectionMedia,
+          and(
+            eq(collectionMedia.mediaId, userMedia.id),
+            eq(collectionMedia.collectionId, collections.id)
+          )
         )
-      )
-      .where(and(eq(userMedia.userId, userId), eq(userMedia.tmdbId, tmdbId)))
-      .limit(1);
+        .where(and(eq(userMedia.userId, userId), eq(userMedia.tmdbId, tmdbId)))
+        .limit(1);
 
-    return result[0];
-  }
-);
+      return result[0];
+    },
+    [`user-${userId}-media-${tmdbId}`],
+    { revalidate: 600, tags: [`user-${userId}-media-${tmdbId}`] }
+  )();
 
-export const isMediaLiked = unstable_cache(
-  async (userId: string, tmdbId: number) => {
-    const result = await getUserMediaWithLikeStatus(userId, tmdbId);
-    return result ? result.isLiked : false;
-  }
-);
+export const isMediaLiked = (userId: string, tmdbId: number) =>
+  unstable_cache(
+    async () => {
+      const result = await getUserMediaWithLikeStatus(userId, tmdbId);
+      return result ? result.isLiked : false;
+    },
+    [`media-liked-status-${userId}-${tmdbId}`],
+    { revalidate: 600, tags: [`user-${userId}-media-${tmdbId}`] }
+  )();
 
-export async function getLikedMovies(userId: string) {
-  const likedMovies = await db
-    .select({
-      movie: movies,
-    })
-    .from(movies)
-    .innerJoin(userMedia, eq(userMedia.id, movies.mediaId))
-    .innerJoin(collectionMedia, eq(collectionMedia.mediaId, userMedia.id))
-    .innerJoin(
-      collections,
-      and(
-        eq(collections.id, collectionMedia.collectionId),
-        eq(collections.userId, userId),
-        eq(collections.name, 'Liked')
-      )
-    );
+export const getLikedMovies = (userId: string) =>
+  unstable_cache(
+    async () => {
+      const likedMovies = await db
+        .select({
+          movie: movies,
+        })
+        .from(movies)
+        .innerJoin(userMedia, eq(userMedia.id, movies.mediaId))
+        .innerJoin(collectionMedia, eq(collectionMedia.mediaId, userMedia.id))
+        .innerJoin(
+          collections,
+          and(
+            eq(collections.id, collectionMedia.collectionId),
+            eq(collections.userId, userId),
+            eq(collections.name, 'Liked')
+          )
+        );
 
-  return likedMovies.map(({ movie }) => movie);
-}
+      return likedMovies.map(({ movie }) => movie);
+    },
+    [`liked-movies-${userId}`],
+    { revalidate: 600, tags: [`liked-movies-${userId}`] }
+  )();
 
-export async function getCollections(userId: string) {
-  const userCollections = await db
-    .select()
-    .from(collections)
-    .where(eq(collections.userId, userId));
+export const getCollections = (userId: string) =>
+  unstable_cache(
+    async () => {
+      const userCollections = await db
+        .select()
+        .from(collections)
+        .where(eq(collections.userId, userId));
 
-  return userCollections;
-}
+      return userCollections;
+    },
+    [`collections-${userId}`],
+    { revalidate: 600, tags: [`collections-${userId}`] }
+  )();

@@ -1,8 +1,8 @@
-import 'server-only';
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
+import 'server-only';
 
 const key = new TextEncoder().encode(process.env.SECRET);
 
