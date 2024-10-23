@@ -11,7 +11,7 @@ import { Suspense } from 'react';
 export default function DiscoverSidebar() {
   const pathname = usePathname();
   const { replace } = useRouter();
-  const { oneMonthAgo, oneMonthLater } = useTime();
+  const { today, oneMonthAgo, oneMonthLater } = useTime();
 
   const handleClick = (query: {
     sort_by: string;
@@ -72,8 +72,8 @@ export default function DiscoverSidebar() {
             color: 'bg-blue-500',
             params: {
               sort_by: 'popularity.desc',
-              with_release_type: '2',
-              min_date: `${oneMonthLater.toISOString().split('T')[0]}`,
+              with_release_type: '2|3',
+              min_date: `${today.toISOString().split('T')[0]}`,
               max_date: `${oneMonthLater.toISOString().split('T')[0]}`,
             },
           },

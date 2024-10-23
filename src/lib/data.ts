@@ -33,23 +33,17 @@ export const getUser = cache(async () => {
 });
 
 export async function getMovie(movieId: number): Promise<Movie | null> {
-  const query = new URLSearchParams();
-
   try {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/movie/${movieId}?${query}`,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
-        },
-        cache: 'force-cache',
-        next: {
-          revalidate: 3600,
-        },
-      }
-    );
+    const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}`, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+      },
+      next: {
+        revalidate: 3600,
+      },
+    });
     const data = await res.json();
     return data;
   } catch (error) {
@@ -58,23 +52,17 @@ export async function getMovie(movieId: number): Promise<Movie | null> {
 }
 
 export async function getTVShow(tvShowId: number): Promise<TVShow | null> {
-  const query = new URLSearchParams();
-
   try {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/tv/${tvShowId}?${query}`,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
-        },
-        cache: 'force-cache',
-        next: {
-          revalidate: 3600,
-        },
-      }
-    );
+    const res = await fetch(`https://api.themoviedb.org/3/tv/${tvShowId}`, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+      },
+      next: {
+        revalidate: 3600,
+      },
+    });
     const data = await res.json();
     return data;
   } catch (error) {
@@ -83,9 +71,6 @@ export async function getTVShow(tvShowId: number): Promise<TVShow | null> {
 }
 
 export async function getNowPlayingMovies(): Promise<MovieList[] | null> {
-  const query = new URLSearchParams();
-  query.append('include_video', 'false');
-
   try {
     const res = await fetch('https://api.themoviedb.org/3/movie/now_playing', {
       method: 'GET',
@@ -93,7 +78,6 @@ export async function getNowPlayingMovies(): Promise<MovieList[] | null> {
         accept: 'application/json',
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
       },
-      cache: 'force-cache',
       next: {
         revalidate: 3600,
       },
@@ -106,9 +90,6 @@ export async function getNowPlayingMovies(): Promise<MovieList[] | null> {
 }
 
 export async function getPopularMovies(): Promise<MovieList[] | null> {
-  const query = new URLSearchParams();
-  query.append('include_video', 'false');
-
   try {
     const res = await fetch('https://api.themoviedb.org/3/movie/popular', {
       method: 'GET',
@@ -116,7 +97,6 @@ export async function getPopularMovies(): Promise<MovieList[] | null> {
         accept: 'application/json',
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
       },
-      cache: 'force-cache',
       next: {
         revalidate: 3600,
       },
@@ -129,9 +109,6 @@ export async function getPopularMovies(): Promise<MovieList[] | null> {
 }
 
 export async function getTopRatedMovies(): Promise<MovieList[] | null> {
-  const query = new URLSearchParams();
-  query.append('include_video', 'false');
-
   try {
     const res = await fetch('https://api.themoviedb.org/3/movie/top_rated', {
       method: 'GET',
@@ -139,7 +116,6 @@ export async function getTopRatedMovies(): Promise<MovieList[] | null> {
         accept: 'application/json',
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
       },
-      cache: 'force-cache',
       next: {
         revalidate: 3600,
       },
@@ -152,9 +128,6 @@ export async function getTopRatedMovies(): Promise<MovieList[] | null> {
 }
 
 export async function getUpcomingMovies(): Promise<MovieList[] | null> {
-  const query = new URLSearchParams();
-  query.append('include_video', 'false');
-
   try {
     const res = await fetch('https://api.themoviedb.org/3/movie/upcoming', {
       method: 'GET',
@@ -162,7 +135,6 @@ export async function getUpcomingMovies(): Promise<MovieList[] | null> {
         accept: 'application/json',
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
       },
-      cache: 'force-cache',
       next: {
         revalidate: 3600,
       },
@@ -175,24 +147,17 @@ export async function getUpcomingMovies(): Promise<MovieList[] | null> {
 }
 
 export async function getAiringToday(): Promise<TVShowList[] | null> {
-  const query = new URLSearchParams();
-  query.append('include_video', 'false');
-
   try {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/tv/airing_today?${query}`,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
-        },
-        cache: 'force-cache',
-        next: {
-          revalidate: 3600,
-        },
-      }
-    );
+    const res = await fetch('https://api.themoviedb.org/3/tv/airing_today', {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+      },
+      next: {
+        revalidate: 3600,
+      },
+    });
     const data = await res.json();
     return data.results;
   } catch (error) {
@@ -201,24 +166,17 @@ export async function getAiringToday(): Promise<TVShowList[] | null> {
 }
 
 export async function getOnTheAir(): Promise<TVShowList[] | null> {
-  const query = new URLSearchParams();
-  query.append('include_video', 'false');
-
   try {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/tv/on_the_air?${query}`,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
-        },
-        cache: 'force-cache',
-        next: {
-          revalidate: 3600,
-        },
-      }
-    );
+    const res = await fetch('https://api.themoviedb.org/3/tv/on_the_air', {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+      },
+      next: {
+        revalidate: 3600,
+      },
+    });
     const data = await res.json();
     return data.results;
   } catch (error) {
@@ -227,24 +185,17 @@ export async function getOnTheAir(): Promise<TVShowList[] | null> {
 }
 
 export async function getPopularTVShows(): Promise<TVShowList[] | null> {
-  const query = new URLSearchParams();
-  query.append('include_video', 'false');
-
   try {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/tv/popular?${query}`,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
-        },
-        cache: 'force-cache',
-        next: {
-          revalidate: 3600,
-        },
-      }
-    );
+    const res = await fetch('https://api.themoviedb.org/3/tv/popular', {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+      },
+      next: {
+        revalidate: 3600,
+      },
+    });
     const data = await res.json();
     return data.results;
   } catch (error) {
@@ -253,24 +204,17 @@ export async function getPopularTVShows(): Promise<TVShowList[] | null> {
 }
 
 export async function getTopRatedTVShows(): Promise<TVShowList[] | null> {
-  const query = new URLSearchParams();
-  query.append('include_video', 'false');
-
   try {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/tv/top_rated?${query}`,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
-        },
-        cache: 'force-cache',
-        next: {
-          revalidate: 3600,
-        },
-      }
-    );
+    const res = await fetch('https://api.themoviedb.org/3/tv/top_rated', {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+      },
+      next: {
+        revalidate: 3600,
+      },
+    });
     const data = await res.json();
     return data.results;
   } catch (error) {
@@ -282,8 +226,6 @@ export async function getDiscoverMovies(
   searchParams: SearchParams
 ): Promise<{ results: MovieList[]; pages: number } | null> {
   const query = new URLSearchParams();
-  query.append('include_video', 'false');
-
   if (searchParams.sort_by) query.append('sort_by', searchParams.sort_by);
 
   if (searchParams.genre)
@@ -319,7 +261,6 @@ export async function getDiscoverMovies(
           accept: 'application/json',
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
         },
-        cache: 'force-cache',
         next: {
           revalidate: 3600,
         },
@@ -339,7 +280,6 @@ export async function getSearchMovies(
   query: string
 ): Promise<{ results: MovieList[]; pages: number } | null> {
   const searchParams = new URLSearchParams();
-  searchParams.append('include_adult', 'false');
   searchParams.append('query', query);
 
   try {
@@ -351,7 +291,6 @@ export async function getSearchMovies(
           accept: 'application/json',
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
         },
-        cache: 'force-cache',
         next: {
           revalidate: 3600,
         },

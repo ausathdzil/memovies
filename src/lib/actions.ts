@@ -79,6 +79,11 @@ export async function signup(prevState: SignUpState, formData: FormData) {
     .values({ name, email, password: hashedPassword })
     .returning({ id: users.id });
 
+  await db
+    .insert(collections)
+    .values({ userId: user[0].id, name: 'Liked' })
+    .returning({ id: collections.id });
+
   if (!user[0]) {
     return {
       success: false,
@@ -167,28 +172,11 @@ export async function addMovieToLiked(userId: string, formData: FormData) {
     posterPath: formData.get('posterPath') as string,
   };
 
-  const existingCollection = await db
+  const [likedCollection] = await db
     .select()
     .from(collections)
     .where(and(eq(collections.userId, userId), eq(collections.name, 'Liked')))
     .limit(1);
-
-  let likedCollection: { id: string };
-  if (existingCollection.length === 0) {
-    const [collection] = await db
-      .insert(collections)
-      .values({
-        userId,
-        name: 'Liked',
-      })
-      .returning({
-        id: collections.id,
-      });
-
-    likedCollection = collection;
-  } else {
-    likedCollection = existingCollection[0];
-  }
 
   const [userMediaEntry] = await db
     .insert(userMedia)
