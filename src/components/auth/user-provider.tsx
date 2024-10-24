@@ -1,12 +1,11 @@
 'use client';
 
-import { createContext, ReactNode } from 'react';
-import { use } from 'react';
+import { createContext, ReactNode, use } from 'react';
 
 export type User = {
   id: string;
   name: string;
-  createdAt: Date;
+  email: string;
 };
 
 type UserPromise = Promise<User | null>;

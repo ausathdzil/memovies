@@ -25,6 +25,7 @@ export const getUser = cache(async () => {
     .select({
       id: users.id,
       name: users.name,
+      email: users.email,
       createdAt: users.createdAt,
     })
     .from(users)

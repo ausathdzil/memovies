@@ -64,6 +64,7 @@ export const collectionMedia = pgTable('collection_media', {
     .references(() => userMedia.id),
 });
 
+export type User = typeof users.$inferSelect;
 export type UserMedia = typeof userMedia.$inferSelect;
 export type Collection = typeof collections.$inferSelect;
 export type Movie = typeof movies.$inferSelect;

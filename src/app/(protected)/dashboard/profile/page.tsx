@@ -1,14 +1,14 @@
-import { getUser } from '@/lib/data';
+import ProfileForm from '@/components/dashboard/profile-form';
+import { Loader2 } from 'lucide-react';
+import { Suspense } from 'react';
 
-export default async function Page() {
-  const user = await getUser();
-
+export default function Page() {
   return (
-    <article>
-      <h1>Profile</h1>
-      <p>
-        Welcome, <span className="text-teal-500">{user.name}</span>!
-      </p>
-    </article>
+    <section className="w-full space-y-4">
+      <h1 className="text-2xl font-bold">Account Information</h1>
+      <Suspense fallback={<Loader2 className="animate-spin" />}>
+        <ProfileForm />
+      </Suspense>
+    </section>
   );
 }

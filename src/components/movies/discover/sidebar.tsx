@@ -34,7 +34,7 @@ export default function DiscoverSidebar() {
   };
 
   return (
-    <ScrollArea className="max-w-[20%] hidden lg:block border-y-2 border-l-2 border-zinc-950 rounded-s-xl">
+    <ScrollArea className="w-1/5 min-w-[20%] hidden lg:block border-y-2 border-l-2 border-zinc-950 rounded-s-xl">
       <nav className="p-6 border-b border-zinc-950 space-y-4">
         {[
           {

@@ -95,17 +95,6 @@ export async function signup(prevState: SignUpState, formData: FormData) {
   redirect('/dashboard');
 }
 
-export type LoginState =
-  | {
-      success: boolean;
-      message?: string | null;
-      errors?: {
-        email?: string[];
-        password?: string[];
-      };
-    }
-  | undefined;
-
 const LoginFormSchema = z.object({
   email: z
     .string()
@@ -120,6 +109,17 @@ const LoginFormSchema = z.object({
     })
     .trim(),
 });
+
+export type LoginState =
+  | {
+      success: boolean;
+      message?: string | null;
+      errors?: {
+        email?: string[];
+        password?: string[];
+      };
+    }
+  | undefined;
 
 export async function login(prevState: LoginState, formData: FormData) {
   const validatedFields = LoginFormSchema.safeParse({
@@ -162,6 +162,61 @@ export async function login(prevState: LoginState, formData: FormData) {
   }
 
   await createSession(user[0].id);
+}
+
+const UpdateAccountSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: 'Name must be at least 2 characters long.' })
+    .max(50, { message: 'Name should not exceed 50 characters.' })
+    .trim(),
+  email: z.string().email({ message: 'Invalid email address.' }).trim(),
+});
+
+export type UpdateAccountState =
+  | {
+      success: boolean;
+      message?: string | null;
+      errors?: {
+        name?: string[];
+        email?: string[];
+      };
+    }
+  | undefined;
+
+export async function updateAccount(
+  userId: string,
+  prevState: UpdateAccountState,
+  formData: FormData
+) {
+  const validatedFields = UpdateAccountSchema.safeParse({
+    name: formData.get('name'),
+    email: formData.get('email'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { name, email } = validatedFields.data;
+
+  try {
+    await db.update(users).set({ name, email }).where(eq(users.id, userId));
+  } catch (error) {
+    return {
+      success: false,
+      message: 'Failed to update account.',
+    };
+  }
+
+  revalidatePath('/dashboard');
+  return {
+    success: true,
+    message: 'Account updated successfully.',
+  };
 }
 
 export async function addMovieToLiked(userId: string, formData: FormData) {
