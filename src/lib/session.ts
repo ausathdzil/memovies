@@ -38,7 +38,7 @@ export async function createSession(userId: string) {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
-    sameSite: 'lax' as 'lax',
+    sameSite: 'lax',
     path: '/',
   });
 
@@ -70,7 +70,7 @@ export async function updateSession() {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
-    sameSite: 'lax' as 'lax',
+    sameSite: 'lax',
     path: '/',
   });
 }

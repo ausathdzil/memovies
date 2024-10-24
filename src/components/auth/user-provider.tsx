@@ -3,9 +3,10 @@
 import { createContext, ReactNode } from 'react';
 import { use } from 'react';
 
-type User = {
+export type User = {
   id: string;
   name: string;
+  createdAt: Date;
 };
 
 type UserPromise = Promise<User | null>;
@@ -13,7 +14,7 @@ type UserPromise = Promise<User | null>;
 const UserContext = createContext<UserPromise | null>(null);
 
 export function useUser() {
-  let userPromise = use(UserContext);
+  const userPromise = use(UserContext);
   if (!userPromise) {
     throw new Error('useUser must be used within a UserProvider');
   }
