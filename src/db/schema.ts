@@ -1,4 +1,4 @@
-import { integer, pgTable, text } from 'drizzle-orm/pg-core';
+import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: text('id')
@@ -7,6 +7,10 @@ export const users = pgTable('users', {
   name: text('name').notNull(),
   email: text('email').notNull().unique(),
   password: text('password').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .$onUpdate(() => new Date()),
 });
 
 export const collections = pgTable('collections', {
@@ -17,6 +21,10 @@ export const collections = pgTable('collections', {
   userId: text('user_id')
     .notNull()
     .references(() => users.id),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .$onUpdate(() => new Date()),
 });
 
 export const userMedia = pgTable('media', {
@@ -29,6 +37,7 @@ export const userMedia = pgTable('media', {
   userId: text('user_id')
     .notNull()
     .references(() => users.id),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 
 export const movies = pgTable('movies', {

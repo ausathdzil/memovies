@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import clsx from 'clsx';
-import { Boxes, LayoutDashboard, User } from 'lucide-react';
+import { Heart, LayoutDashboard, List, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -14,7 +14,7 @@ export default function DashboardSidebar({
   const pathname = usePathname();
 
   return (
-    <nav className="max-w-[20%] min-h-svh border rounded-s-xl p-6 flex flex-col gap-4">
+    <nav className="hidden sm:flex min-h-svh border rounded-s-xl p-6 flex-col gap-4">
       {[
         {
           icon: LayoutDashboard,
@@ -22,14 +22,19 @@ export default function DashboardSidebar({
           href: '/dashboard',
         },
         {
-          icon: User,
-          label: 'Profile',
-          href: '/profile',
+          icon: Heart,
+          label: 'Liked',
+          href: '/dashboard/liked',
         },
         {
-          icon: Boxes,
+          icon: List,
           label: 'Collections',
-          href: '/collections',
+          href: '/dashboard/collections',
+        },
+        {
+          icon: User,
+          label: 'Profile',
+          href: '/dashboard/profile',
         },
       ].map((item) => (
         <Link href={item.href} key={item.label}>

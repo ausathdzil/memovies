@@ -28,7 +28,7 @@ export default function FloatingDock() {
             { name: 'Home', href: '/', icon: Home },
             { name: 'Discover Movies', href: '/movies/discover', icon: Search },
             { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-            { name: 'Profile', href: '/profile', icon: User },
+            { name: 'Profile', href: '/dashboard/profile', icon: User },
           ].map((link) => (
             <div key={link.name}>
               <Tooltip>

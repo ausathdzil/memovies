@@ -14,7 +14,7 @@ import {
   TVShowList,
 } from '@/lib/definitions';
 import { verifySession } from '@/lib/session';
-import { and, eq, sql } from 'drizzle-orm';
+import { and, desc, eq, sql } from 'drizzle-orm';
 import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 
@@ -25,6 +25,7 @@ export const getUser = cache(async () => {
     .select({
       id: users.id,
       name: users.name,
+      createdAt: users.createdAt,
     })
     .from(users)
     .where(eq(users.id, session.userId as string));
@@ -385,4 +386,20 @@ export const getCollections = (userId: string) =>
     },
     [`collections-${userId}`],
     { revalidate: 600, tags: [`collections-${userId}`] }
+  )();
+
+export const getSortedUserMedias = (userId: string) =>
+  unstable_cache(
+    async () => {
+      const userMedias = await db
+        .select()
+        .from(userMedia)
+        .where(eq(userMedia.userId, userId))
+        .orderBy(desc(userMedia.createdAt))
+        .limit(5);
+
+      return userMedias;
+    },
+    [`user-medias-${userId}`],
+    { revalidate: 600, tags: [`user-medias-${userId}`] }
   )();

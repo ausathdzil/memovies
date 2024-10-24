@@ -6,7 +6,7 @@ export default async function Page() {
 
   return (
     <article>
-      <h1>Collections</h1>
+      <h1>Your Collections:</h1>
       <ul>
         {collections.map((collection) => (
           <li key={collection.id}>{collection.name}</li>
