@@ -1,10 +1,7 @@
 import { getCollection, getCollectionItems } from '@/lib/data';
 
-export default async function Page({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const collection = await getCollection(params.id);
   const collectionItems = await getCollectionItems(params.id);
 
