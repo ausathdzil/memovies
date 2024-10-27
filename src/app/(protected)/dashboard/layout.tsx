@@ -2,8 +2,6 @@ import { UserProvider } from '@/components/auth/user-provider';
 import DashboardSidebar from '@/components/dashboard/sidebar';
 import { getUser } from '@/lib/data';
 
-export const experimental_ppr = true;
-
 export default function Layout({ children }: { children: React.ReactNode }) {
   const userPromise = getUser();
 

@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
         pathname: '/t/p/**',
       },
     ],
+    unoptimized: true,
   },
 };
 

@@ -50,7 +50,7 @@ export default function Header() {
         <div className="flex grow justify-end items-center">
           <Link
             className="h-full sm:border-l-2 border-zinc-950 flex items-center px-4 sm:px-6"
-            href="/login"
+            href="/dashboard"
           >
             <Button className="border-2 border-zinc-950 shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-zinc-50 text-black hover:bg-teal-500">
               Get Started

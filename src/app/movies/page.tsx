@@ -5,8 +5,6 @@ import { Film } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
-export const experimental_ppr = true;
-
 export default function Page() {
   return (
     <main className="min-h-[calc(100vh-168px)] p-16 flex flex-col items-center justify-center gap-8">

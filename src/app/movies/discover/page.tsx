@@ -5,8 +5,6 @@ import DiscoverSkeleton from '@/components/skeletons/discover-skeleton';
 import { SearchParams } from '@/lib/definitions';
 import { Suspense } from 'react';
 
-export const experimental_ppr = true;
-
 export default function Page(props: { searchParams: Promise<SearchParams> }) {
   return (
     <main className="flex p-8 max-h-[calc(100vh-64px)]">
