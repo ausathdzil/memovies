@@ -18,7 +18,7 @@ import { z } from 'zod';
 const SignUpFormSchema = z.object({
   name: z
     .string()
-    .min(2, { message: 'Name must be at least 2 characters long.' })
+    .min(2, { message: 'Name is required.' })
     .max(50, { message: 'Name should not exceed 50 characters.' })
     .trim(),
   email: z.string().email({ message: 'Invalid email address.' }).trim(),
@@ -165,7 +165,7 @@ export async function login(prevState: LoginState, formData: FormData) {
 const UpdateAccountSchema = z.object({
   name: z
     .string()
-    .min(2, { message: 'Name must be at least 2 characters long.' })
+    .min(2, { message: 'Name is required.' })
     .max(50, { message: 'Name should not exceed 50 characters.' })
     .trim(),
   email: z.string().email({ message: 'Invalid email address.' }).trim(),
@@ -337,7 +337,6 @@ export async function addMovieToLiked(userId: string, formData: FormData) {
 
   revalidateTag(`user-${userId}-media-${movieData.tmdbId}`);
   revalidateTag(`liked-movies-${userId}`);
-  revalidateTag(`user-medias-${userId}`);
   revalidatePath('/dashboard');
 }
 
@@ -360,6 +359,71 @@ export async function removeMovieFromLiked(userId: string, formData: FormData) {
 
   revalidateTag(`user-${userId}-media-${tmdbId}`);
   revalidateTag(`liked-movies-${userId}`);
-  revalidateTag(`user-medias-${userId}`);
   revalidatePath('/dashboard');
+}
+
+const CreateCollectionSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: 'Collection name is required.' })
+    .max(50, { message: 'Collection name should not exceed 50 characters.' })
+    .trim(),
+  description: z
+    .string()
+    .max(255, { message: 'Description should not exceed 255 characters.' })
+    .optional(),
+});
+
+export type CreateCollectionState =
+  | {
+      success: boolean;
+      message?: string | null;
+      errors?: {
+        name?: string[];
+      };
+    }
+  | undefined;
+
+export async function createCollection(
+  userId: string,
+  prevState: any,
+  formData: FormData
+) {
+  const validatedFields = CreateCollectionSchema.safeParse({
+    name: formData.get('name'),
+    description: formData.get('description'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { name, description } = validatedFields.data;
+
+  const existingCollection = await db
+    .select()
+    .from(collections)
+    .where(and(eq(collections.userId, userId), eq(collections.name, name)))
+    .limit(1);
+
+  if (existingCollection.length > 0) {
+    return {
+      success: false,
+      errors: {
+        name: ['Collection with this name already exists.'],
+      },
+    };
+  }
+
+  await db.insert(collections).values({ userId, name, description });
+
+  revalidateTag(`collections-${userId}`);
+  revalidatePath('/dashboard');
+  return {
+    success: true,
+    message: 'Collection created successfully.',
+  };
 }

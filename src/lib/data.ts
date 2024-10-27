@@ -308,7 +308,7 @@ export async function getSearchMovies(
   }
 }
 
-export const getUserMediaWithLikeStatus = (userId: string, tmdbId: number) =>
+export const isMediaLiked = (userId: string, tmdbId: number) =>
   unstable_cache(
     async () => {
       const result = await db
@@ -334,19 +334,9 @@ export const getUserMediaWithLikeStatus = (userId: string, tmdbId: number) =>
         .where(and(eq(userMedia.userId, userId), eq(userMedia.tmdbId, tmdbId)))
         .limit(1);
 
-      return result[0];
+      return result[0] ? result[0].isLiked : false;
     },
     [`user-${userId}-media-${tmdbId}`],
-    { revalidate: 600, tags: [`user-${userId}-media-${tmdbId}`] }
-  )();
-
-export const isMediaLiked = (userId: string, tmdbId: number) =>
-  unstable_cache(
-    async () => {
-      const result = await getUserMediaWithLikeStatus(userId, tmdbId);
-      return result ? result.isLiked : false;
-    },
-    [`media-liked-status-${userId}-${tmdbId}`],
     { revalidate: 600, tags: [`user-${userId}-media-${tmdbId}`] }
   )();
 

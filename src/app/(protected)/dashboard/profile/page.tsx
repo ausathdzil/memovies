@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 export default function Page() {
   return (
     <section className="w-full space-y-16">
-      <div className="space-y-4 w-1/2">
+      <div className="space-y-4">
         <h1 className="text-2xl font-bold">Account Information</h1>
         <Suspense fallback={<Loader2 className="animate-spin" />}>
           <ProfileForm />

@@ -42,9 +42,9 @@ export default function Header() {
           </Link>
           <Link
             className="p-6 border-zinc-950 border-r-2 hover:bg-zinc-100 transition ease-in-out"
-            href="/tv-shows"
+            href="/movies/discover"
           >
-            TV Shows
+            Discover
           </Link>
         </div>
         <div className="flex grow justify-end items-center">

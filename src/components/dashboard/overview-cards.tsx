@@ -1,4 +1,13 @@
+import { CreateCollectionForm } from '@/components/dashboard/create-collection-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Collection, Movie, UserMedia } from '@/db/schema';
 import {
   getCollections,
@@ -6,7 +15,7 @@ import {
   getSortedUserMedias,
   getUser,
 } from '@/lib/data';
-import { Clock, Heart, List } from 'lucide-react';
+import { Clock, Heart, List, Plus } from 'lucide-react';
 import Link from 'next/link';
 
 export async function OverviewCards() {
@@ -82,9 +91,24 @@ function UserCollections({ collections }: { collections: Collection[] }) {
   return (
     <Card className="border-2 border-zinc-950 shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
       <CardHeader>
-        <CardTitle className="flex items-center">
-          <List size={16} className="mr-2" />
-          <span>Collections</span>
+        <CardTitle className="flex justify-between items-center">
+          <div className="flex items-center">
+            <List size={16} className="mr-2" />
+            <span>Collections</span>
+          </div>
+          <Dialog>
+            <DialogTrigger asChild>
+              <button aria-describedby="Create collection">
+                <Plus size={16} />
+              </button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create a new collection.</DialogTitle>
+              </DialogHeader>
+              <CreateCollectionForm />
+            </DialogContent>
+          </Dialog>
         </CardTitle>
       </CardHeader>
       <CardContent>

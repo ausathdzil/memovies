@@ -18,6 +18,7 @@ export const collections = pgTable('collections', {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text('name').notNull(),
+  description: text('description'),
   userId: text('user_id')
     .notNull()
     .references(() => users.id),
