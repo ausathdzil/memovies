@@ -37,7 +37,7 @@ export default function LoginForm() {
         />
         {state?.errors?.email && (
           <p className="text-destructive text-sm">
-            {state.errors.email.join(', ')}
+            {state.errors.email[0]}
           </p>
         )}
       </div>
@@ -92,6 +92,7 @@ export default function LoginForm() {
         {pending && <Loader2 className="animate-spin mr-2" size={16} />}
         <span>Login</span>
       </Button>
+      {state?.message && <p className="text-destructive">{state.message}</p>}
     </form>
   );
 }

@@ -145,23 +145,21 @@ export async function login(prevState: LoginState, formData: FormData) {
   if (!user[0]) {
     return {
       success: false,
-      errors: {
-        email: ['Email not found.'],
-      },
+      message: 'Invalid credentials.',
     };
   }
 
   const passwordMatch = await bcrypt.compare(password, user[0].password);
+
   if (!passwordMatch) {
     return {
       success: false,
-      errors: {
-        password: ['Incorrect password.'],
-      },
+      message: 'Invalid credentials.',
     };
   }
 
   await createSession(user[0].id);
+  redirect('/dashboard');
 }
 
 const UpdateAccountSchema = z.object({
@@ -216,6 +214,86 @@ export async function updateAccount(
   return {
     success: true,
     message: 'Account updated successfully.',
+  };
+}
+
+const UpdatePasswordSchema = z.object({
+  currentPassword: z
+    .string()
+    .min(1, { message: 'Please enter your current password.' })
+    .trim(),
+  newPassword: z
+    .string()
+    .min(8, { message: 'Be at least 8 characters long.' })
+    .regex(/[a-zA-Z]/, { message: 'Contain at least one letter.' })
+    .regex(/[0-9]/, { message: 'Contain at least one number.' })
+    .trim(),
+});
+
+export type UpdatePasswordState =
+  | {
+      success: boolean;
+      message?: string | null;
+      errors?: {
+        currentPassword?: string[];
+        newPassword?: string[];
+      };
+    }
+  | undefined;
+
+export async function updatePassword(
+  userId: string,
+  prevState: UpdatePasswordState,
+  formData: FormData
+) {
+  const validatedFields = UpdatePasswordSchema.safeParse({
+    currentPassword: formData.get('currentPassword'),
+    newPassword: formData.get('newPassword'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { currentPassword, newPassword } = validatedFields.data;
+
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+
+  const passwordMatch = await bcrypt.compare(currentPassword, user[0].password);
+
+  if (!passwordMatch) {
+    return {
+      success: false,
+      errors: {
+        currentPassword: ['Incorrect password.'],
+      },
+    };
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  try {
+    await db
+      .update(users)
+      .set({ password: hashedPassword })
+      .where(eq(users.id, userId));
+  } catch (error) {
+    return {
+      success: false,
+      message: 'Failed to update password.',
+    };
+  }
+
+  return {
+    success: true,
+    message: 'Password updated successfully.',
   };
 }
 

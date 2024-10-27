@@ -64,7 +64,6 @@ export default function ProfileForm() {
           </p>
         )}
       </div>
-
       <Button
         className="bg-background text-primary hover:bg-teal-500 border-2 border-zinc-950"
         disabled={pending}

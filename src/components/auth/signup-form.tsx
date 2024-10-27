@@ -36,9 +36,7 @@ export default function SignUpForm() {
           placeholder="Enter your name"
         />
         {state?.errors?.name && (
-          <p className="text-destructive text-sm">
-            {state.errors.name.join(', ')}
-          </p>
+          <p className="text-destructive text-sm">{state.errors.name[0]}</p>
         )}
       </div>
       <div className="space-y-1">
@@ -54,9 +52,7 @@ export default function SignUpForm() {
           placeholder="email@example.com"
         />
         {state?.errors?.email && (
-          <p className="text-destructive text-sm">
-            {state.errors.email.join(', ')}
-          </p>
+          <p className="text-destructive text-sm">{state.errors.email[0]}</p>
         )}
       </div>
       <div className="space-y-1">
