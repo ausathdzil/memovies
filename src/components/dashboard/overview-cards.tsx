@@ -106,19 +106,6 @@ function RecentActivities({ userMedias }: { userMedias: UserMedia[] }) {
 }
 
 function UserCollections({ collections }: { collections: Collection[] }) {
-  function slugify(text: string) {
-    return text
-      .toString()
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]+/g, '');
-  }
-
-  const collectionSlugs = collections.map((collection) => ({
-    ...collection,
-    slug: slugify(collection.name),
-  }));
-
   return (
     <Card className="border-2 border-zinc-950 shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
       <CardHeader>
@@ -144,14 +131,14 @@ function UserCollections({ collections }: { collections: Collection[] }) {
       </CardHeader>
       <CardContent>
         <ul className="space-y-2">
-          {collectionSlugs.map((collection) => (
+          {collections.map((collection) => (
             <li key={collection.id}>
               <Link
                 className="hover:underline underline-offset-2"
                 href={
                   collection.name === 'Liked'
-                    ? `/${collection.slug}`
-                    : `/collections/${collection.slug}`
+                    ? '/dashboard/liked'
+                    : `/dashboard/collections/${collection.id}`
                 }
               >
                 {collection.name}

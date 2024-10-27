@@ -379,6 +379,37 @@ export const getCollections = (userId: string) =>
     { revalidate: 600, tags: [`collections-${userId}`] }
   )();
 
+export const getCollection = (collectionId: string) =>
+  unstable_cache(
+    async () => {
+      const userCollection = await db
+        .select()
+        .from(collections)
+        .where(eq(collections.id, collectionId));
+
+      return userCollection[0];
+    },
+    [`collection-${collectionId}`],
+    { revalidate: 600, tags: [`collection-${collectionId}`] }
+  )();
+
+export const getCollectionItems = (collectionId: string) =>
+  unstable_cache(
+    async () => {
+      const collectionItems = await db
+        .select({
+          media: userMedia,
+        })
+        .from(userMedia)
+        .innerJoin(collectionMedia, eq(collectionMedia.mediaId, userMedia.id))
+        .where(eq(collectionMedia.collectionId, collectionId));
+
+      return collectionItems.map(({ media }) => media);
+    },
+    [`collection-items-${collectionId}`],
+    { revalidate: 600, tags: [`collection-items-${collectionId}`] }
+  )();
+
 export const getSortedUserMedias = (userId: string) =>
   unstable_cache(
     async () => {
