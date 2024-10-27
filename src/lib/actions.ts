@@ -386,7 +386,7 @@ export type CreateCollectionState =
 
 export async function createCollection(
   userId: string,
-  prevState: any,
+  prevState: CreateCollectionState,
   formData: FormData
 ) {
   const validatedFields = CreateCollectionSchema.safeParse({
@@ -426,4 +426,62 @@ export async function createCollection(
     success: true,
     message: 'Collection created successfully.',
   };
+}
+
+export async function addMovieToCollection(userId: string, formData: FormData) {
+  const movieData = {
+    tmdbId: Number(formData.get('tmdbId')),
+    title: formData.get('title') as string,
+    mediaType: formData.get('mediaType') as string,
+    posterPath: formData.get('posterPath') as string,
+    collectionId: formData.get('collectionId') as string,
+  };
+
+  const userMediaEntry = await db
+    .select()
+    .from(userMedia)
+    .where(
+      and(eq(userMedia.userId, userId), eq(userMedia.tmdbId, movieData.tmdbId))
+    )
+    .limit(1);
+
+  let userMediaId;
+
+  if (userMediaEntry.length === 0) {
+    const insertedUserMedia = await db
+      .insert(userMedia)
+      .values({
+        userId,
+        tmdbId: movieData.tmdbId,
+        title: movieData.title,
+        mediaType: movieData.mediaType,
+      })
+      .returning({ id: userMedia.id });
+
+    userMediaId = insertedUserMedia[0].id;
+  } else {
+    userMediaId = userMediaEntry[0].id;
+  }
+
+  const existingCollectionMedia = await db
+    .select()
+    .from(collectionMedia)
+    .where(
+      and(
+        eq(collectionMedia.collectionId, movieData.collectionId),
+        eq(collectionMedia.mediaId, userMediaId)
+      )
+    )
+    .limit(1);
+
+  if (existingCollectionMedia.length === 0) {
+    await db.insert(collectionMedia).values({
+      collectionId: movieData.collectionId,
+      mediaId: userMediaId,
+    });
+  }
+
+  revalidateTag(`user-${userId}-media-${movieData.tmdbId}`);
+  revalidateTag(`collection-${movieData.collectionId}`);
+  revalidatePath('/dashboard');
 }

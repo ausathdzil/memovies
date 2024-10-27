@@ -1,3 +1,4 @@
+import CollectionDialog from '@/components/movies/movie/collection-dialog';
 import LikeButton from '@/components/movies/movie/like-button';
 import { getMovie, isMediaLiked } from '@/lib/data';
 import { verifySession } from '@/lib/session';
@@ -11,7 +12,7 @@ export default async function MovieDetails(props: {
 }) {
   const session = await verifySession();
   const params = await props.params;
-  
+
   const movie = await getMovie(params.movieId);
   if (movie?.success === false || !movie) {
     notFound();
@@ -20,7 +21,7 @@ export default async function MovieDetails(props: {
   const isLiked = await isMediaLiked(session.userId as string, movie.id);
 
   return (
-    <div className="relative max-w-4xl mx-auto min-h-[450px] overflow-hidden rounded-lg border-2 border-zinc-950 shadow-[10px_10px_0_0_rgba(0,0,0,1)]">
+    <div className="relative max-w-4xl mx-4 xl:mx-auto min-h-[450px] overflow-hidden rounded-lg border-2 border-zinc-950 shadow-[10px_10px_0_0_rgba(0,0,0,1)]">
       <Image
         className="object-cover object-top"
         src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
@@ -66,6 +67,10 @@ export default async function MovieDetails(props: {
                 movie={movie}
                 userId={session.userId as string}
                 initialLiked={isLiked}
+              />
+              <CollectionDialog
+                movie={movie}
+                userId={session.userId as string}
               />
             </div>
           )}

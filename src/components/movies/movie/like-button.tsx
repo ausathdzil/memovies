@@ -21,7 +21,7 @@ export default function LikeButton({
   const removeMovieFromLikedWithId = removeMovieFromLiked.bind(null, userId);
   const addMovieToLikedWithId = addMovieToLiked.bind(null, userId);
 
-  const handleAction = async (formData: FormData) => {
+  const handleAction = (formData: FormData) => {
     startTransition(async () => {
       if (liked) {
         await removeMovieFromLikedWithId(formData);

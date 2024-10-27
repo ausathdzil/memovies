@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -15,7 +14,7 @@ import {
   getSortedUserMedias,
   getUser,
 } from '@/lib/data';
-import { Clock, Heart, List, Plus } from 'lucide-react';
+import { Activity, Clock, Heart, List, Plus } from 'lucide-react';
 import Link from 'next/link';
 
 export async function OverviewCards() {
@@ -77,8 +76,27 @@ function RecentActivities({ userMedias }: { userMedias: UserMedia[] }) {
       <CardContent>
         <ul className="space-y-2">
           {userMedias.map((media) => (
-            <li key={media.id}>
-              <p>{media.title}</p>
+            <li
+              className="group border-b border-b-muted pb-1 transition-colors hover:border-b-primary"
+              key={media.id}
+            >
+              <Link
+                className="flex justify-between"
+                href={
+                  media.mediaType === 'movie'
+                    ? `/movies/${media.tmdbId}`
+                    : `/tv-shows/${media.tmdbId}`
+                }
+              >
+                <span>{media.title}</span>
+                <span className="text-sm text-muted-foreground">
+                  {new Date(media.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </span>
+              </Link>
             </li>
           ))}
         </ul>
@@ -88,6 +106,19 @@ function RecentActivities({ userMedias }: { userMedias: UserMedia[] }) {
 }
 
 function UserCollections({ collections }: { collections: Collection[] }) {
+  function slugify(text: string) {
+    return text
+      .toString()
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]+/g, '');
+  }
+
+  const collectionSlugs = collections.map((collection) => ({
+    ...collection,
+    slug: slugify(collection.name),
+  }));
+
   return (
     <Card className="border-2 border-zinc-950 shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
       <CardHeader>
@@ -102,7 +133,7 @@ function UserCollections({ collections }: { collections: Collection[] }) {
                 <Plus size={16} />
               </button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="border-2shadow-[6px_6px_0_0_rgba(20,184,166,1)]">
               <DialogHeader>
                 <DialogTitle>Create a new collection.</DialogTitle>
               </DialogHeader>
@@ -113,9 +144,18 @@ function UserCollections({ collections }: { collections: Collection[] }) {
       </CardHeader>
       <CardContent>
         <ul className="space-y-2">
-          {collections.map((collection) => (
+          {collectionSlugs.map((collection) => (
             <li key={collection.id}>
-              <p>{collection.name}</p>
+              <Link
+                className="hover:underline underline-offset-2"
+                href={
+                  collection.name === 'Liked'
+                    ? `/${collection.slug}`
+                    : `/collections/${collection.slug}`
+                }
+              >
+                {collection.name}
+              </Link>
             </li>
           ))}
         </ul>
@@ -135,19 +175,13 @@ function UserStats({
     <Card className="border-2 border-zinc-950 shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
       <CardHeader>
         <CardTitle className="flex items-center">
-          <List size={16} className="mr-2" />
+          <Activity size={16} className="mr-2" />
           <span>Stats</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <ul className="space-y-2">
-          <li>
-            <p>Watched Movies: {userMediasLength}</p>
-          </li>
-          <li>
-            <p>Collections: {collectionsLength}</p>
-          </li>
-        </ul>
+        <p>Movies: {userMediasLength}</p>
+        <p>Collections: {collectionsLength}</p>
       </CardContent>
     </Card>
   );
@@ -163,7 +197,12 @@ function LikedMovies({ likedMovies }: { likedMovies: Movie[] }) {
           <ul className="space-y-2">
             {likedMovies.map((movie) => (
               <li key={movie.id}>
-                <Link href={`/movies/${movie.tmdbId}`}>{movie.title}</Link>
+                <Link
+                  className="hover:underline underline-offset-2"
+                  href={`/movies/${movie.tmdbId}`}
+                >
+                  {movie.title}
+                </Link>
               </li>
             ))}
           </ul>
