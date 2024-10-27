@@ -428,7 +428,18 @@ export async function createCollection(
   };
 }
 
-export async function addMovieToCollection(userId: string, formData: FormData) {
+export type AddMovieToCollectionState =
+  | {
+      success: boolean;
+      message?: string | null;
+    }
+  | undefined;
+
+export async function addMovieToCollection(
+  userId: string,
+  prevState: AddMovieToCollectionState,
+  formData: FormData
+) {
   const movieData = {
     tmdbId: Number(formData.get('tmdbId')),
     title: formData.get('title') as string,
@@ -475,13 +486,30 @@ export async function addMovieToCollection(userId: string, formData: FormData) {
     .limit(1);
 
   if (existingCollectionMedia.length === 0) {
-    await db.insert(collectionMedia).values({
-      collectionId: movieData.collectionId,
-      mediaId: userMediaId,
-    });
+    try {
+      await db.insert(collectionMedia).values({
+        collectionId: movieData.collectionId,
+        mediaId: userMediaId,
+      });
+
+      revalidateTag(`collection-items-${movieData.collectionId}`);
+      revalidateTag(`user-${userId}-media-${movieData.tmdbId}`);
+      revalidateTag(`user-medias-${userId}`);
+      revalidatePath('/dashboard');
+      return {
+        success: true,
+        message: 'Movie added to collection successfully.',
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Movie already exists in this collection.',
+      };
+    }
   }
 
-  revalidateTag(`user-${userId}-media-${movieData.tmdbId}`);
-  revalidateTag(`collection-${movieData.collectionId}`);
-  revalidatePath('/dashboard');
+  return {
+    success: false,
+    message: 'Movie already exists in this collection.',
+  };
 }

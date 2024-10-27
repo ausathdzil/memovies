@@ -7,7 +7,7 @@ import { Collection } from '@/db/schema';
 import { addMovieToCollection } from '@/lib/actions';
 import { Movie } from '@/lib/definitions';
 import { Loader2, PlusCircle } from 'lucide-react';
-import { useTransition } from 'react';
+import { useActionState } from 'react';
 
 export default function CollectionForm({
   movie,
@@ -18,17 +18,14 @@ export default function CollectionForm({
   userId: string;
   collections: Collection[];
 }) {
-  const [pending, startTransition] = useTransition();
   const addMovieToCollectionWithId = addMovieToCollection.bind(null, userId);
-
-  const handleAction = (formData: FormData) => {
-    startTransition(async () => {
-      await addMovieToCollectionWithId(formData);
-    });
-  };
+  const [state, formAction, pending] = useActionState(
+    addMovieToCollectionWithId,
+    undefined
+  );
 
   return (
-    <form className="space-y-4" action={handleAction}>
+    <form className="space-y-4" action={formAction}>
       <input type="hidden" name="tmdbId" value={movie.id} />
       <input type="hidden" name="title" value={movie.title} />
       <input type="hidden" name="mediaType" value="movie" />
@@ -60,6 +57,11 @@ export default function CollectionForm({
         )}
         <span>Add to collection</span>
       </Button>
+      {state?.success ? (
+        <p className="text-sm text-teal-500">{state?.message}</p>
+      ) : (
+        <p className="text-sm text-destructive">{state?.message}</p>
+      )}
     </form>
   );
 }
