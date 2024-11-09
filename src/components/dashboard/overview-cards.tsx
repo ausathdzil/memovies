@@ -81,14 +81,14 @@ function RecentActivities({ userMedias }: { userMedias: UserMedia[] }) {
               key={media.id}
             >
               <Link
-                className="flex justify-between"
+                className="flex justify-between text-sm"
                 href={
                   media.mediaType === 'movie'
                     ? `/movies/${media.tmdbId}`
                     : `/tv-shows/${media.tmdbId}`
                 }
               >
-                <span>{media.title}</span>
+                <span className="w-1/2">{media.title}</span>
                 <span className="text-sm text-muted-foreground">
                   {new Date(media.createdAt).toLocaleDateString('en-US', {
                     year: 'numeric',
@@ -132,16 +132,22 @@ function UserCollections({ collections }: { collections: Collection[] }) {
       <CardContent>
         <ul className="space-y-2">
           {collections.map((collection) => (
-            <li key={collection.id}>
+            <li
+              className="group border-b border-b-muted pb-1 transition-colors hover:border-b-primary"
+              key={collection.id}
+            >
               <Link
-                className="hover:underline underline-offset-2"
-                href={
-                  collection.name === 'Liked'
-                    ? '/dashboard/liked'
-                    : `/dashboard/collections/${collection.id}`
-                }
+                className="flex justify-between text-sm"
+                href={`/dashboard/collections/${collection.id}`}
               >
-                {collection.name}
+                <span className="w-1/2">{collection.name}</span>
+                <span className="text-sm text-muted-foreground">
+                  {new Date(collection.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </span>
               </Link>
             </li>
           ))}
